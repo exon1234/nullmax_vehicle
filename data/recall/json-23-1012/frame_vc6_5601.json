@@ -1,0 +1,121 @@
+{
+    "task_vehicle": [
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 43.76, 
+                "width": 10.65, 
+                "y": 613.81, 
+                "x": 34.65, 
+                "problem": "FN", 
+                "type": "rect", 
+                "class": "pedestrian"
+            }
+        }
+    ], 
+    "tracks": {
+        "855": {
+            "obstacle_age": 14, 
+            "obstacle_vanish_count": 0, 
+            "cut_direction": 0, 
+            "obstacle_type": 7, 
+            "obstacle_id": 855, 
+            "obstacle_dis_to_line": 0, 
+            "obstacle_brake_lights": 0, 
+            "cut_in_and_out": 0, 
+            "obstacle_lane_width": 0, 
+            "uv_bbox2d": {
+                "obstacle_bbox.height": 99.3856201171875, 
+                "obstacle_bbox.y": 180.1947021484375, 
+                "obstacle_bbox.x": 53.193206787109375, 
+                "obstacle_bbox.width": 45.91871643066406
+            }, 
+            "obstacle_status": 0, 
+            "obstacle_exist_prob": 0.7127881050109863, 
+            "accel": {
+                "obstacle_rel_acc_y_filter": 0, 
+                "obstacle_rel_acc_x_filter": 0
+            }, 
+            "obstacle_lane": 0, 
+            "position": {
+                "obstacle_pos_x_filter": 0, 
+                "obstacle_pos_y_filter": 0
+            }, 
+            "bbox3d": {
+                "obstacle_pos_y": 7.81683349609375, 
+                "obstacle_pos_x": -1.978493094444275
+            }, 
+            "position_std": {
+                "obstacle_std_pos_x_filter": 1000, 
+                "obstacle_std_pos_y_filter": 1000
+            }, 
+            "obstacle_ttc": 20, 
+            "obstacle_type_confidence": 0.8078264594078064, 
+            "velocity": {
+                "obstacle_rel_vel_y_filter": 0, 
+                "obstacle_rel_vel_x_filter": 0
+            }, 
+            "obstacle_valid": 0, 
+            "velocity_std": {
+                "obstacle_std_rel_vel_x_filter": 1000, 
+                "obstacle_std_rel_vel_y_filter": 1000
+            }, 
+            "accel_std": {
+                "obstacle_std_rel_acc_y_filter": 1000, 
+                "obstacle_std_rel_acc_x_filter": 1000
+            }
+        }, 
+        "870": {
+            "obstacle_age": 3, 
+            "obstacle_vanish_count": 0, 
+            "cut_direction": 0, 
+            "obstacle_type": 0, 
+            "obstacle_id": 870, 
+            "obstacle_dis_to_line": 0, 
+            "obstacle_brake_lights": 0, 
+            "cut_in_and_out": 0, 
+            "obstacle_lane_width": 0, 
+            "uv_bbox2d": {
+                "obstacle_bbox.height": 16.2376708984375, 
+                "obstacle_bbox.y": 218.68849182128906, 
+                "obstacle_bbox.x": 576.675048828125, 
+                "obstacle_bbox.width": 45.05718994140625
+            }, 
+            "obstacle_status": 0, 
+            "obstacle_exist_prob": 0.19778597354888916, 
+            "accel": {
+                "obstacle_rel_acc_y_filter": 0, 
+                "obstacle_rel_acc_x_filter": 0
+            }, 
+            "obstacle_lane": 0, 
+            "position": {
+                "obstacle_pos_x_filter": 0, 
+                "obstacle_pos_y_filter": 0
+            }, 
+            "bbox3d": {
+                "obstacle_pos_y": 48.02921676635742, 
+                "obstacle_pos_x": 33.27903366088867
+            }, 
+            "position_std": {
+                "obstacle_std_pos_x_filter": 1000, 
+                "obstacle_std_pos_y_filter": 1000
+            }, 
+            "obstacle_ttc": 20, 
+            "obstacle_type_confidence": 0.965812623500824, 
+            "velocity": {
+                "obstacle_rel_vel_y_filter": 0, 
+                "obstacle_rel_vel_x_filter": 0
+            }, 
+            "obstacle_valid": 1, 
+            "velocity_std": {
+                "obstacle_std_rel_vel_x_filter": 1000, 
+                "obstacle_std_rel_vel_y_filter": 1000
+            }, 
+            "accel_std": {
+                "obstacle_std_rel_acc_y_filter": 1000, 
+                "obstacle_std_rel_acc_x_filter": 1000
+            }
+        }
+    }, 
+    "filename": "frame_vc6_5601.png"
+}

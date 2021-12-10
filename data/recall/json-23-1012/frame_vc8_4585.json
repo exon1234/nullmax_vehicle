@@ -1,0 +1,223 @@
+{
+    "task_vehicle": [
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 55.22, 
+                "width": 79.76, 
+                "y": 539.56, 
+                "x": 1220.78, 
+                "problem": "FN", 
+                "type": "rect", 
+                "class": "car"
+            }
+        }
+    ], 
+    "tracks": {
+        "182": {
+            "obstacle_age": 25, 
+            "obstacle_vanish_count": 0, 
+            "cut_direction": 0, 
+            "obstacle_type": 0, 
+            "obstacle_id": 182, 
+            "obstacle_dis_to_line": 0, 
+            "obstacle_brake_lights": 0, 
+            "cut_in_and_out": 0, 
+            "obstacle_lane_width": 0, 
+            "uv_bbox2d": {
+                "obstacle_bbox.height": 9.397598266601562, 
+                "obstacle_bbox.y": 185.26715087890625, 
+                "obstacle_bbox.x": 454.5418395996094, 
+                "obstacle_bbox.width": 11.622314453125
+            }, 
+            "obstacle_status": 0, 
+            "obstacle_exist_prob": 0.9154763221740723, 
+            "accel": {
+                "obstacle_rel_acc_y_filter": 0, 
+                "obstacle_rel_acc_x_filter": 0
+            }, 
+            "obstacle_lane": 0, 
+            "position": {
+                "obstacle_pos_x_filter": 0, 
+                "obstacle_pos_y_filter": 0
+            }, 
+            "bbox3d": {
+                "obstacle_pos_y": 82.90264129638672, 
+                "obstacle_pos_x": 36.68232727050781
+            }, 
+            "position_std": {
+                "obstacle_std_pos_x_filter": 1000, 
+                "obstacle_std_pos_y_filter": 1000
+            }, 
+            "obstacle_ttc": 20, 
+            "obstacle_type_confidence": 0.9384385347366333, 
+            "velocity": {
+                "obstacle_rel_vel_y_filter": 0, 
+                "obstacle_rel_vel_x_filter": 0
+            }, 
+            "obstacle_valid": 1, 
+            "velocity_std": {
+                "obstacle_std_rel_vel_x_filter": 1000, 
+                "obstacle_std_rel_vel_y_filter": 1000
+            }, 
+            "accel_std": {
+                "obstacle_std_rel_acc_y_filter": 1000, 
+                "obstacle_std_rel_acc_x_filter": 1000
+            }
+        }, 
+        "180": {
+            "obstacle_age": 8, 
+            "obstacle_vanish_count": 0, 
+            "cut_direction": 0, 
+            "obstacle_type": 0, 
+            "obstacle_id": 180, 
+            "obstacle_dis_to_line": 0, 
+            "obstacle_brake_lights": 0, 
+            "cut_in_and_out": 0, 
+            "obstacle_lane_width": 0, 
+            "uv_bbox2d": {
+                "obstacle_bbox.height": 265.64862060546875, 
+                "obstacle_bbox.y": 96.90069580078125, 
+                "obstacle_bbox.x": 4.374580383300781, 
+                "obstacle_bbox.width": 360.4820556640625
+            }, 
+            "obstacle_status": 0, 
+            "obstacle_exist_prob": 1, 
+            "accel": {
+                "obstacle_rel_acc_y_filter": 0, 
+                "obstacle_rel_acc_x_filter": 0
+            }, 
+            "obstacle_lane": 0, 
+            "position": {
+                "obstacle_pos_x_filter": 0, 
+                "obstacle_pos_y_filter": 0
+            }, 
+            "bbox3d": {
+                "obstacle_pos_y": 2.9268109798431396, 
+                "obstacle_pos_x": -0.16489219665527344
+            }, 
+            "position_std": {
+                "obstacle_std_pos_x_filter": 1000, 
+                "obstacle_std_pos_y_filter": 1000
+            }, 
+            "obstacle_ttc": 20, 
+            "obstacle_type_confidence": 0.9691128730773926, 
+            "velocity": {
+                "obstacle_rel_vel_y_filter": 0, 
+                "obstacle_rel_vel_x_filter": 0
+            }, 
+            "obstacle_valid": 1, 
+            "velocity_std": {
+                "obstacle_std_rel_vel_x_filter": 1000, 
+                "obstacle_std_rel_vel_y_filter": 1000
+            }, 
+            "accel_std": {
+                "obstacle_std_rel_acc_y_filter": 1000, 
+                "obstacle_std_rel_acc_x_filter": 1000
+            }
+        }, 
+        "186": {
+            "obstacle_age": 1, 
+            "obstacle_vanish_count": 0, 
+            "cut_direction": 0, 
+            "obstacle_type": 0, 
+            "obstacle_id": 186, 
+            "obstacle_dis_to_line": 0, 
+            "obstacle_brake_lights": 0, 
+            "cut_in_and_out": 0, 
+            "obstacle_lane_width": 0, 
+            "uv_bbox2d": {
+                "obstacle_bbox.height": 6.575592041015625, 
+                "obstacle_bbox.y": 187.24119567871094, 
+                "obstacle_bbox.x": 488.0171813964844, 
+                "obstacle_bbox.width": 7.343170166015625
+            }, 
+            "obstacle_status": 0, 
+            "obstacle_exist_prob": 0.14418774843215942, 
+            "accel": {
+                "obstacle_rel_acc_y_filter": 0, 
+                "obstacle_rel_acc_x_filter": 0
+            }, 
+            "obstacle_lane": 0, 
+            "position": {
+                "obstacle_pos_x_filter": 0, 
+                "obstacle_pos_y_filter": 0
+            }, 
+            "bbox3d": {
+                "obstacle_pos_y": 118.5088119506836, 
+                "obstacle_pos_x": 59.13986587524414
+            }, 
+            "position_std": {
+                "obstacle_std_pos_x_filter": 1000, 
+                "obstacle_std_pos_y_filter": 1000
+            }, 
+            "obstacle_ttc": 20, 
+            "obstacle_type_confidence": 0.7729774713516235, 
+            "velocity": {
+                "obstacle_rel_vel_y_filter": 0, 
+                "obstacle_rel_vel_x_filter": 0
+            }, 
+            "obstacle_valid": 0, 
+            "velocity_std": {
+                "obstacle_std_rel_vel_x_filter": 1000, 
+                "obstacle_std_rel_vel_y_filter": 1000
+            }, 
+            "accel_std": {
+                "obstacle_std_rel_acc_y_filter": 1000, 
+                "obstacle_std_rel_acc_x_filter": 1000
+            }
+        }, 
+        "188": {
+            "obstacle_age": 6, 
+            "obstacle_vanish_count": 0, 
+            "cut_direction": 0, 
+            "obstacle_type": 0, 
+            "obstacle_id": 188, 
+            "obstacle_dis_to_line": 0, 
+            "obstacle_brake_lights": 0, 
+            "cut_in_and_out": 0, 
+            "obstacle_lane_width": 0, 
+            "uv_bbox2d": {
+                "obstacle_bbox.height": 5.1986846923828125, 
+                "obstacle_bbox.y": 190.0298309326172, 
+                "obstacle_bbox.x": 498.1888427734375, 
+                "obstacle_bbox.width": 11.622314453125
+            }, 
+            "obstacle_status": 0, 
+            "obstacle_exist_prob": 0.30587106943130493, 
+            "accel": {
+                "obstacle_rel_acc_y_filter": 0, 
+                "obstacle_rel_acc_x_filter": 0
+            }, 
+            "obstacle_lane": 0, 
+            "position": {
+                "obstacle_pos_x_filter": 0, 
+                "obstacle_pos_y_filter": 0
+            }, 
+            "bbox3d": {
+                "obstacle_pos_y": 149.9102783203125, 
+                "obstacle_pos_x": 78.14030456542969
+            }, 
+            "position_std": {
+                "obstacle_std_pos_x_filter": 1000, 
+                "obstacle_std_pos_y_filter": 1000
+            }, 
+            "obstacle_ttc": 20, 
+            "obstacle_type_confidence": 0.8750110268592834, 
+            "velocity": {
+                "obstacle_rel_vel_y_filter": 0, 
+                "obstacle_rel_vel_x_filter": 0
+            }, 
+            "obstacle_valid": 1, 
+            "velocity_std": {
+                "obstacle_std_rel_vel_x_filter": 1000, 
+                "obstacle_std_rel_vel_y_filter": 1000
+            }, 
+            "accel_std": {
+                "obstacle_std_rel_acc_y_filter": 1000, 
+                "obstacle_std_rel_acc_x_filter": 1000
+            }
+        }
+    }, 
+    "filename": "frame_vc8_4585.png"
+}

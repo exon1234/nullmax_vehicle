@@ -1,0 +1,136 @@
+{
+    "task_vehicle": [
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 253.67, 
+                "width": 157.99, 
+                "y": 540.16, 
+                "x": 624.28, 
+                "type": "rect", 
+                "class": "wheel"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 52.37, 
+                "width": 20.16, 
+                "y": 601.81, 
+                "x": 368.7, 
+                "type": "rect", 
+                "class": "wheel"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "1", 
+                "height": 75.06, 
+                "width": 55.74, 
+                "y": 548.32, 
+                "x": 174.33, 
+                "type": "rect", 
+                "class": "truck"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "1", 
+                "height": 46.09, 
+                "width": 42.6, 
+                "y": 565.26, 
+                "x": 256.63, 
+                "type": "rect", 
+                "class": "car"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "1", 
+                "height": 98.17, 
+                "width": 102.05, 
+                "y": 535.08, 
+                "x": 286.22, 
+                "type": "rect", 
+                "class": "car"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 937.72, 
+                "width": 1433.13, 
+                "y": 0.0, 
+                "x": 486.87, 
+                "type": "rect", 
+                "class": "bus"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 123.01, 
+                "width": 177.42, 
+                "y": 531.32, 
+                "x": 336.23, 
+                "type": "rect", 
+                "class": "car"
+            }
+        }
+    ], 
+    "tracks": {
+        "515": {
+            "obstacle_vanish_count": 0, 
+            "cut_direction": 0, 
+            "obstacle_type": 0, 
+            "obstacle_id": 515, 
+            "obstacle_dis_to_line": 0, 
+            "obstacle_brake_lights": 0, 
+            "cut_in_and_out": 0, 
+            "obstacle_lane_width": 0, 
+            "uv_bbox2d": {
+                "obstacle_bbox.height": 22.686996459960938, 
+                "obstacle_bbox.y": 185.13525390625, 
+                "obstacle_bbox.x": 85.8603515625, 
+                "obstacle_bbox.width": 31.903480529785156
+            }, 
+            "obstacle_status": 0, 
+            "obstacle_exist_prob": 0.20000000298023224, 
+            "velocity_std": {
+                "obstacle_std_rel_vel_x_filter": 1000, 
+                "obstacle_std_rel_vel_y_filter": 1000
+            }, 
+            "accel": {
+                "obstacle_rel_acc_y_filter": 0, 
+                "obstacle_rel_acc_x_filter": 0
+            }, 
+            "obstacle_lane": 0, 
+            "position": {
+                "obstacle_pos_x_filter": 0, 
+                "obstacle_pos_y_filter": 0
+            }, 
+            "problem": "FP", 
+            "bbox3d": {
+                "obstacle_pos_y": 51.77149200439453, 
+                "obstacle_pos_x": -13.939414024353027
+            }, 
+            "position_std": {
+                "obstacle_std_pos_x_filter": 1000, 
+                "obstacle_std_pos_y_filter": 1000
+            }, 
+            "obstacle_ttc": 20, 
+            "obstacle_type_confidence": 0.9516679048538208, 
+            "velocity": {
+                "obstacle_rel_vel_y_filter": 0, 
+                "obstacle_rel_vel_x_filter": 0
+            }, 
+            "obstacle_valid": 1, 
+            "obstacle_age": 1, 
+            "accel_std": {
+                "obstacle_std_rel_acc_y_filter": 1000, 
+                "obstacle_std_rel_acc_x_filter": 1000
+            }
+        }
+    }, 
+    "filename": "frame_vc5_5069.png"
+}

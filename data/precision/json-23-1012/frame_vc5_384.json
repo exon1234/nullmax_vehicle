@@ -1,0 +1,147 @@
+{
+    "task_vehicle": [
+        {
+            "tags": {
+                "occluded": "1", 
+                "height": 45.62, 
+                "width": 50.62, 
+                "y": 568.3, 
+                "x": 244.87, 
+                "type": "rect", 
+                "class": "car"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 84.79, 
+                "width": 45.08, 
+                "y": 600.99, 
+                "x": 476.31, 
+                "type": "rect", 
+                "class": "wheel"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 184.22, 
+                "width": 255.43, 
+                "y": 501.61, 
+                "x": 397.6, 
+                "type": "rect", 
+                "class": "car"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 188.03, 
+                "width": 165.22, 
+                "y": 449.81, 
+                "x": 278.24, 
+                "type": "rect", 
+                "class": "truck"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 1050.32, 
+                "width": 1352.71, 
+                "y": 29.68, 
+                "x": 567.29, 
+                "type": "rect", 
+                "class": "car"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 63.82, 
+                "width": 33.47, 
+                "y": 598.31, 
+                "x": 399.56, 
+                "type": "rect", 
+                "class": "wheel"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 228.34, 
+                "width": 162.43, 
+                "y": 630.17, 
+                "x": 634.57, 
+                "type": "rect", 
+                "class": "wheel"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "1", 
+                "height": 96.96, 
+                "width": 121.0, 
+                "y": 538.9, 
+                "x": 138.8, 
+                "type": "rect", 
+                "class": "car"
+            }
+        }
+    ], 
+    "tracks": {
+        "191": {
+            "obstacle_vanish_count": 0, 
+            "cut_direction": 0, 
+            "obstacle_type": 0, 
+            "obstacle_id": 191, 
+            "obstacle_dis_to_line": 0, 
+            "obstacle_brake_lights": 0, 
+            "cut_in_and_out": 0, 
+            "obstacle_lane_width": 0, 
+            "uv_bbox2d": {
+                "obstacle_bbox.height": 19.03759765625, 
+                "obstacle_bbox.y": 187.6738739013672, 
+                "obstacle_bbox.x": 71.19364166259766, 
+                "obstacle_bbox.width": 22.324462890625
+            }, 
+            "obstacle_status": 0, 
+            "obstacle_exist_prob": 0.08117949217557907, 
+            "velocity_std": {
+                "obstacle_std_rel_vel_x_filter": 1000, 
+                "obstacle_std_rel_vel_y_filter": 1000
+            }, 
+            "accel": {
+                "obstacle_rel_acc_y_filter": 0, 
+                "obstacle_rel_acc_x_filter": 0
+            }, 
+            "obstacle_lane": 0, 
+            "position": {
+                "obstacle_pos_x_filter": 0, 
+                "obstacle_pos_y_filter": 0
+            }, 
+            "problem": "FP", 
+            "bbox3d": {
+                "obstacle_pos_y": 61.689937591552734, 
+                "obstacle_pos_x": -18.049747467041016
+            }, 
+            "position_std": {
+                "obstacle_std_pos_x_filter": 1000, 
+                "obstacle_std_pos_y_filter": 1000
+            }, 
+            "obstacle_ttc": 20, 
+            "obstacle_type_confidence": 0.7935524582862854, 
+            "velocity": {
+                "obstacle_rel_vel_y_filter": 0, 
+                "obstacle_rel_vel_x_filter": 0
+            }, 
+            "obstacle_valid": 1, 
+            "obstacle_age": 1, 
+            "accel_std": {
+                "obstacle_std_rel_acc_y_filter": 1000, 
+                "obstacle_std_rel_acc_x_filter": 1000
+            }
+        }
+    }, 
+    "filename": "frame_vc5_384.png"
+}

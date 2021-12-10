@@ -1,0 +1,213 @@
+{
+    "task_vehicle": [
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 45.87, 
+                "width": 57.33, 
+                "y": 566.64, 
+                "x": 1467.93, 
+                "type": "rect", 
+                "class": "car"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 129.23, 
+                "width": 94.88, 
+                "y": 556.75, 
+                "x": 714.58, 
+                "type": "rect", 
+                "class": "wheel"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 46.73, 
+                "width": 49.51, 
+                "y": 487.78, 
+                "x": 294.32, 
+                "type": "rect", 
+                "class": "car"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 22.61, 
+                "width": 25.19, 
+                "y": 499.44, 
+                "x": 435.58, 
+                "type": "rect", 
+                "class": "car"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "1", 
+                "height": 33.44, 
+                "width": 35.83, 
+                "y": 492.19, 
+                "x": 191.52, 
+                "type": "rect", 
+                "class": "car"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 94.58, 
+                "width": 61.17, 
+                "y": 559.67, 
+                "x": 950.99, 
+                "type": "rect", 
+                "class": "wheel"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 21.97, 
+                "width": 17.41, 
+                "y": 582.79, 
+                "x": 1307.86, 
+                "type": "rect", 
+                "class": "wheel"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 270.09, 
+                "width": 550.58, 
+                "y": 416.27, 
+                "x": 478.9, 
+                "type": "rect", 
+                "class": "car"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 24.27, 
+                "width": 20.5, 
+                "y": 577.48, 
+                "x": 1242.12, 
+                "type": "rect", 
+                "class": "wheel"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 43.29, 
+                "width": 50.42, 
+                "y": 494.15, 
+                "x": 154.58, 
+                "type": "rect", 
+                "class": "car"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 43.94, 
+                "width": 25.3, 
+                "y": 497.46, 
+                "x": 15.22, 
+                "type": "rect", 
+                "class": "rider"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 52.55, 
+                "width": 44.91, 
+                "y": 482.64, 
+                "x": 225.44, 
+                "type": "rect", 
+                "class": "car"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 56.36, 
+                "width": 140.62, 
+                "y": 548.46, 
+                "x": 1193.82, 
+                "type": "rect", 
+                "class": "car"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 40.61, 
+                "width": 22.15, 
+                "y": 497.39, 
+                "x": 43.01, 
+                "type": "rect", 
+                "class": "rider"
+            }
+        }
+    ], 
+    "tracks": {
+        "15": {
+            "obstacle_vanish_count": 0, 
+            "cut_direction": 0, 
+            "obstacle_type": 0, 
+            "obstacle_id": 15, 
+            "obstacle_dis_to_line": 0, 
+            "obstacle_brake_lights": 0, 
+            "cut_in_and_out": 0, 
+            "obstacle_lane_width": 0, 
+            "uv_bbox2d": {
+                "obstacle_bbox.height": 24.2821044921875, 
+                "obstacle_bbox.y": 158.8697509765625, 
+                "obstacle_bbox.x": 163.28659057617188, 
+                "obstacle_bbox.width": 50
+            }, 
+            "obstacle_status": 0, 
+            "obstacle_exist_prob": 0.08117949217557907, 
+            "velocity_std": {
+                "obstacle_std_rel_vel_x_filter": 1000, 
+                "obstacle_std_rel_vel_y_filter": 1000
+            }, 
+            "accel": {
+                "obstacle_rel_acc_y_filter": 0, 
+                "obstacle_rel_acc_x_filter": 0
+            }, 
+            "obstacle_lane": 0, 
+            "position": {
+                "obstacle_pos_x_filter": 0, 
+                "obstacle_pos_y_filter": 0
+            }, 
+            "problem": "FP", 
+            "bbox3d": {
+                "obstacle_pos_y": 32.02046585083008, 
+                "obstacle_pos_x": -1.5909146070480347
+            }, 
+            "position_std": {
+                "obstacle_std_pos_x_filter": 1000, 
+                "obstacle_std_pos_y_filter": 1000
+            }, 
+            "obstacle_ttc": 20, 
+            "obstacle_type_confidence": 0.8523839712142944, 
+            "velocity": {
+                "obstacle_rel_vel_y_filter": 0, 
+                "obstacle_rel_vel_x_filter": 0
+            }, 
+            "obstacle_valid": 1, 
+            "obstacle_age": 1, 
+            "accel_std": {
+                "obstacle_std_rel_acc_y_filter": 1000, 
+                "obstacle_std_rel_acc_x_filter": 1000
+            }
+        }
+    }, 
+    "filename": "frame_vc8_2274.png"
+}

@@ -1,0 +1,114 @@
+{
+    "task_vehicle": [
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 160.68, 
+                "width": 146.99, 
+                "y": 567.33, 
+                "x": 1682.22, 
+                "type": "rect", 
+                "class": "truck"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 199.24, 
+                "width": 106.88, 
+                "y": 693.43, 
+                "x": 1265.18, 
+                "type": "rect", 
+                "class": "wheel"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 93.36, 
+                "width": 40.98, 
+                "y": 678.28, 
+                "x": 1510.47, 
+                "type": "rect", 
+                "class": "wheel"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "1", 
+                "height": 222.48, 
+                "width": 202.01, 
+                "y": 499.34, 
+                "x": 1443.96, 
+                "type": "rect", 
+                "class": "truck"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 824.36, 
+                "width": 967.39, 
+                "y": 115.93, 
+                "x": 630.51, 
+                "type": "rect", 
+                "class": "bus"
+            }
+        }
+    ], 
+    "tracks": {
+        "508": {
+            "obstacle_vanish_count": 0, 
+            "cut_direction": 0, 
+            "obstacle_type": 0, 
+            "obstacle_id": 508, 
+            "obstacle_dis_to_line": 0, 
+            "obstacle_brake_lights": 0, 
+            "cut_in_and_out": 0, 
+            "obstacle_lane_width": 0, 
+            "uv_bbox2d": {
+                "obstacle_bbox.height": 11.669097900390625, 
+                "obstacle_bbox.y": 218.2476043701172, 
+                "obstacle_bbox.x": 558.12548828125, 
+                "obstacle_bbox.width": 12.0926513671875
+            }, 
+            "obstacle_status": 0, 
+            "obstacle_exist_prob": 0.21618255972862244, 
+            "velocity_std": {
+                "obstacle_std_rel_vel_x_filter": 1000, 
+                "obstacle_std_rel_vel_y_filter": 1000
+            }, 
+            "accel": {
+                "obstacle_rel_acc_y_filter": 0, 
+                "obstacle_rel_acc_x_filter": 0
+            }, 
+            "obstacle_lane": 0, 
+            "position": {
+                "obstacle_pos_x_filter": 0, 
+                "obstacle_pos_y_filter": 0
+            }, 
+            "problem": "FP", 
+            "bbox3d": {
+                "obstacle_pos_y": 66.81592559814453, 
+                "obstacle_pos_x": 42.07798767089844
+            }, 
+            "position_std": {
+                "obstacle_std_pos_x_filter": 1000, 
+                "obstacle_std_pos_y_filter": 1000
+            }, 
+            "obstacle_ttc": 20, 
+            "obstacle_type_confidence": 0.865705132484436, 
+            "velocity": {
+                "obstacle_rel_vel_y_filter": 0, 
+                "obstacle_rel_vel_x_filter": 0
+            }, 
+            "obstacle_valid": 1, 
+            "obstacle_age": 3, 
+            "accel_std": {
+                "obstacle_std_rel_acc_y_filter": 1000, 
+                "obstacle_std_rel_acc_x_filter": 1000
+            }
+        }
+    }, 
+    "filename": "frame_vc6_5062.png"
+}

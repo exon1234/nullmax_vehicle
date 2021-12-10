@@ -1,0 +1,147 @@
+{
+    "task_vehicle": [
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 68.79, 
+                "width": 143.8, 
+                "y": 542.57, 
+                "x": 585.38, 
+                "type": "rect", 
+                "class": "car"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 41.63, 
+                "width": 78.13, 
+                "y": 562.12, 
+                "x": 277.68, 
+                "type": "rect", 
+                "class": "car"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 76.79, 
+                "width": 76.79, 
+                "y": 553.04, 
+                "x": 1495.53, 
+                "type": "rect", 
+                "class": "rider"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 28.18, 
+                "width": 63.54, 
+                "y": 559.43, 
+                "x": 1006.15, 
+                "type": "rect", 
+                "class": "car"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 65.71, 
+                "width": 67.93, 
+                "y": 556.73, 
+                "x": 1466.0, 
+                "type": "rect", 
+                "class": "rider"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 51.92, 
+                "width": 76.08, 
+                "y": 547.54, 
+                "x": 390.04, 
+                "type": "rect", 
+                "class": "car"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 59.72, 
+                "width": 78.35, 
+                "y": 549.28, 
+                "x": 1132.81, 
+                "type": "rect", 
+                "class": "rider"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 112.6, 
+                "width": 245.1, 
+                "y": 490.69, 
+                "x": 581.28, 
+                "type": "rect", 
+                "class": "bus"
+            }
+        }
+    ], 
+    "tracks": {
+        "990": {
+            "obstacle_vanish_count": 0, 
+            "cut_direction": 0, 
+            "obstacle_type": 0, 
+            "obstacle_id": 990, 
+            "obstacle_dis_to_line": 0, 
+            "obstacle_brake_lights": 0, 
+            "cut_in_and_out": 0, 
+            "obstacle_lane_width": 0, 
+            "uv_bbox2d": {
+                "obstacle_bbox.height": 8.546142578125, 
+                "obstacle_bbox.y": 189.1443634033203, 
+                "obstacle_bbox.x": 120.66683197021484, 
+                "obstacle_bbox.width": 14.499839782714844
+            }, 
+            "obstacle_status": 0, 
+            "obstacle_exist_prob": 0.37638044357299805, 
+            "velocity_std": {
+                "obstacle_std_rel_vel_x_filter": 1000, 
+                "obstacle_std_rel_vel_y_filter": 1000
+            }, 
+            "accel": {
+                "obstacle_rel_acc_y_filter": 0, 
+                "obstacle_rel_acc_x_filter": 0
+            }, 
+            "obstacle_lane": 0, 
+            "position": {
+                "obstacle_pos_x_filter": 0, 
+                "obstacle_pos_y_filter": 0
+            }, 
+            "problem": "FP", 
+            "bbox3d": {
+                "obstacle_pos_y": 137.45257568359375, 
+                "obstacle_pos_x": -32.705604553222656
+            }, 
+            "position_std": {
+                "obstacle_std_pos_x_filter": 1000, 
+                "obstacle_std_pos_y_filter": 1000
+            }, 
+            "obstacle_ttc": 20, 
+            "obstacle_type_confidence": 0.8836327195167542, 
+            "velocity": {
+                "obstacle_rel_vel_y_filter": 0, 
+                "obstacle_rel_vel_x_filter": 0
+            }, 
+            "obstacle_valid": 1, 
+            "obstacle_age": 33, 
+            "accel_std": {
+                "obstacle_std_rel_acc_y_filter": 1000, 
+                "obstacle_std_rel_acc_x_filter": 1000
+            }
+        }
+    }, 
+    "filename": "frame_vc5_1884.png"
+}

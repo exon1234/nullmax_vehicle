@@ -1,0 +1,265 @@
+{
+    "task_vehicle": [
+        {
+            "tags": {
+                "occluded": "1", 
+                "height": 96.72, 
+                "width": 101.89, 
+                "y": 545.41, 
+                "x": 1426.67, 
+                "type": "rect", 
+                "class": "car"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "1", 
+                "height": 1021.73, 
+                "width": 1292.4, 
+                "y": 0.0, 
+                "x": 0.0, 
+                "type": "rect", 
+                "class": "truck"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 61.37, 
+                "width": 30.23, 
+                "y": 601.83, 
+                "x": 1441.24, 
+                "type": "rect", 
+                "class": "wheel"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 265.07, 
+                "width": 300.51, 
+                "y": 425.06, 
+                "x": 1177.85, 
+                "type": "rect", 
+                "class": "car"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "1", 
+                "height": 68.66, 
+                "width": 73.26, 
+                "y": 560.17, 
+                "x": 1488.03, 
+                "type": "rect", 
+                "class": "car"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 87.92, 
+                "width": 43.76, 
+                "y": 602.14, 
+                "x": 1374.93, 
+                "type": "rect", 
+                "class": "wheel"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 249.11, 
+                "width": 159.4, 
+                "y": 586.55, 
+                "x": 993.02, 
+                "type": "rect", 
+                "class": "wheel"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "1", 
+                "height": 96.72, 
+                "width": 101.89, 
+                "y": 545.41, 
+                "x": 1426.67, 
+                "type": "rect", 
+                "class": "car"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "1", 
+                "height": 1021.73, 
+                "width": 1292.4, 
+                "y": 0.0, 
+                "x": 0.0, 
+                "type": "rect", 
+                "class": "truck"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 61.37, 
+                "width": 30.23, 
+                "y": 601.83, 
+                "x": 1441.24, 
+                "type": "rect", 
+                "class": "wheel"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 265.07, 
+                "width": 300.51, 
+                "y": 425.06, 
+                "x": 1177.85, 
+                "type": "rect", 
+                "class": "car"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "1", 
+                "height": 68.66, 
+                "width": 73.26, 
+                "y": 560.17, 
+                "x": 1488.03, 
+                "type": "rect", 
+                "class": "car"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 87.92, 
+                "width": 43.76, 
+                "y": 602.14, 
+                "x": 1374.93, 
+                "type": "rect", 
+                "class": "wheel"
+            }
+        }, 
+        {
+            "tags": {
+                "occluded": "0", 
+                "height": 249.11, 
+                "width": 159.4, 
+                "y": 586.55, 
+                "x": 993.02, 
+                "type": "rect", 
+                "class": "wheel"
+            }
+        }
+    ], 
+    "tracks": {
+        "432": {
+            "obstacle_vanish_count": 0, 
+            "cut_direction": 0, 
+            "obstacle_type": 0, 
+            "obstacle_id": 432, 
+            "obstacle_dis_to_line": 0, 
+            "obstacle_brake_lights": 0, 
+            "cut_in_and_out": 0, 
+            "obstacle_lane_width": 0, 
+            "uv_bbox2d": {
+                "obstacle_bbox.height": 17.07281494140625, 
+                "obstacle_bbox.y": 189.5657501220703, 
+                "obstacle_bbox.x": 506.0070495605469, 
+                "obstacle_bbox.width": 16.471160888671875
+            }, 
+            "obstacle_status": 0, 
+            "obstacle_exist_prob": 0.22993630170822144, 
+            "position_std": {
+                "obstacle_std_pos_x_filter": 1000, 
+                "obstacle_std_pos_y_filter": 1000
+            }, 
+            "accel": {
+                "obstacle_rel_acc_y_filter": 0, 
+                "obstacle_rel_acc_x_filter": 0
+            }, 
+            "obstacle_lane": 0, 
+            "position": {
+                "obstacle_pos_x_filter": 0, 
+                "obstacle_pos_y_filter": 0
+            }, 
+            "problem": "FP", 
+            "bbox3d": {
+                "obstacle_pos_y": 45.65122985839844, 
+                "obstacle_pos_x": 24.639123916625977
+            }, 
+            "obstacle_age": 8, 
+            "obstacle_ttc": 20, 
+            "obstacle_type_confidence": 0.9567469358444214, 
+            "velocity": {
+                "obstacle_rel_vel_y_filter": 0, 
+                "obstacle_rel_vel_x_filter": 0
+            }, 
+            "obstacle_valid": 1, 
+            "velocity_std": {
+                "obstacle_std_rel_vel_x_filter": 1000, 
+                "obstacle_std_rel_vel_y_filter": 1000
+            }, 
+            "accel_std": {
+                "obstacle_std_rel_acc_y_filter": 1000, 
+                "obstacle_std_rel_acc_x_filter": 1000
+            }
+        }, 
+        "427": {
+            "obstacle_vanish_count": 0, 
+            "cut_direction": 0, 
+            "obstacle_type": 0, 
+            "obstacle_id": 427, 
+            "obstacle_dis_to_line": 0, 
+            "obstacle_brake_lights": 0, 
+            "cut_in_and_out": 0, 
+            "obstacle_lane_width": 0, 
+            "uv_bbox2d": {
+                "obstacle_bbox.height": 57.16090393066406, 
+                "obstacle_bbox.y": 163.9945526123047, 
+                "obstacle_bbox.x": 446.8973083496094, 
+                "obstacle_bbox.width": 58.632720947265625
+            }, 
+            "obstacle_status": 0, 
+            "obstacle_exist_prob": 0.3273526430130005, 
+            "velocity_std": {
+                "obstacle_std_rel_vel_x_filter": 1000, 
+                "obstacle_std_rel_vel_y_filter": 1000
+            }, 
+            "accel": {
+                "obstacle_rel_acc_y_filter": 0, 
+                "obstacle_rel_acc_x_filter": 0
+            }, 
+            "obstacle_lane": 0, 
+            "position": {
+                "obstacle_pos_x_filter": 0, 
+                "obstacle_pos_y_filter": 0
+            }, 
+            "problem": "FP", 
+            "bbox3d": {
+                "obstacle_pos_y": 13.631288528442383, 
+                "obstacle_pos_x": 6.4217729568481445
+            }, 
+            "position_std": {
+                "obstacle_std_pos_x_filter": 1000, 
+                "obstacle_std_pos_y_filter": 1000
+            }, 
+            "obstacle_ttc": 20, 
+            "obstacle_type_confidence": 0.6097691059112549, 
+            "velocity": {
+                "obstacle_rel_vel_y_filter": 0, 
+                "obstacle_rel_vel_x_filter": 0
+            }, 
+            "obstacle_valid": 1, 
+            "obstacle_age": 6, 
+            "accel_std": {
+                "obstacle_std_rel_acc_y_filter": 1000, 
+                "obstacle_std_rel_acc_x_filter": 1000
+            }
+        }
+    }, 
+    "filename": "frame_vc8_3144.png"
+}
