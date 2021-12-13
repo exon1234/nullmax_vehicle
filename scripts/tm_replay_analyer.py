@@ -14,6 +14,10 @@ from jyftools import *
 
 def get_replay_result(label_jsons, perce_jsons, func_list):
     file_name = utils.BASIC_NAME + "replay" + '.xlsx'
+    pd.set_option('display.unicode.ambiguous_as_wide', True)
+    pd.set_option('display.unicode.east_asian_width', True)
+    pd.set_option('display.max_columns', 500)
+    pd.set_option('display.width', 500)
     # if not os.path.exists(file_name):
     #     df = pd.DataFrame(columns=['NO', 'Date', 'Time', 'Problem'], index=None)
     #     df.to_excel(file_name, index=False, engine='openpyxl')
@@ -25,7 +29,7 @@ def get_replay_result(label_jsons, perce_jsons, func_list):
 def get_recall_side(label_jsons, perce_jsons, file_name):
     '''召回率获取'''
     if not label_jsons or len(label_jsons) != 1 or not perce_jsons[0].endswith('.json'):
-        print('无可用检测标注数据')
+        print('无2d检测标注数据')
         return
     configs = Config.replay_configs()
     enum_obstacle_type = configs["enum_obstacle"]
@@ -866,41 +870,3 @@ def get_problem_track(label_jsons, perce_jsons, file_name):
     #     os.remove(filename)
     # with open(filename, 'a') as f:
     #     json.dump(problem_filter_result, f, indent=4)
-
-
-# @utils.register('前视-CIPV', 'KPI')
-# def get_cipv_front(label_jsons, perce_jsons, file_name):
-#     '''
-#       CIPV目标漏检场景筛选
-#       '''
-# old_cipv_id = None
-# last_cipv_id = None
-# last_time = 0
-# for perce_data ,t in for datum in data:
-#     new_cipv_id = perce_data.cipv_id
-#     tracks = perce_data.tracks
-#     now_time = t.to_sec()
-#     if old_cipv_id != new_cipv_id:
-#         if (now_time - last_time) <= 1 and last_cipv_id == new_cipv_id and (
-#                 new_cipv_id not in old_id_list) and new_cipv_id != 0:
-#             for i in range(len(tracks)):
-#                 if tracks[i].id == new_cipv_id:
-#                     cipv_x = tracks[i].position.x
-#                     data = pd.read_excel(file_name)
-#                     data_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(t.to_sec()))
-#                     num = data.shape[0]
-#                     data.loc[num, 'NO'] = num + 1
-#                     data.loc[num, 'Date'] = data_time.split(' ')[0]
-#                     data.loc[num, 'BagPath'] = bag_path
-#                     data.loc[num, 'Time'] = data_time.split(' ')[1]
-#                     data.loc[num, 'Problem'] = '检测目标漏检'
-#                     data.loc[num, 'Obstracel_X'] = cipv_x
-#                     data.to_excel(file_name, index=False, engine='openpyxl')
-#                     break
-#         last_cipv_id = old_cipv_id
-#         old_cipv_id = new_cipv_id
-#         last_time = now_time
-#     tracks_id_list = []
-#     if len(tracks) > 0:
-#         [tracks_id_list.append(tracks[i].id) for i in range(len(tracks))]
-#     old_id_list = tracks_id_list

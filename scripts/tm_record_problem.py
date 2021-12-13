@@ -15,7 +15,7 @@ def problem_record(name):
         if not os.path.exists(note_file_name):
             df = pd.DataFrame(columns=['NO', 'Date', 'Time', 'Problem', 'Describe'], index=None)
             df.to_excel(note_file_name, index=False, engine='openpyxl')
-        df = pd.read_excel(note_file_name)
+        df = pd.read_excel(note_file_name, encoding='utf-8')
         num = df.shape[0]
         df.loc[num, 'NO'] = num + 1
         df.loc[num, 'Date'] = datetime.now().strftime("%Y-%m-%d")
@@ -30,5 +30,5 @@ def get_all_problems():
     if not os.path.exists(note_file_name):
         df = pd.DataFrame(columns=['NO', 'Date', 'Time', 'Problem', 'Describe'], index=None)
     else:
-        df = pd.read_excel(note_file_name)
+        df = pd.read_excel(note_file_name, encoding='utf-8')
     return df

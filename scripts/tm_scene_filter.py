@@ -37,7 +37,7 @@ def CountAEBTimes(file_path, file_name):
             except:
                 continue
             if aeb_active == 4 and is_active == False:
-                data = pd.read_excel(file_name)
+                data = pd.read_excel(file_name, encoding='utf-8')
                 data_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(t.to_sec()))
                 num = data.shape[0]
                 data.loc[num, 'NO'] = num + 1
@@ -58,7 +58,7 @@ def CountAEBTimes(file_path, file_name):
                 data.loc[num, 'acceleration'] = max(acceler_list)
                 acceler_list = []
                 is_active = False
-    data = pd.read_excel(file_name)
+    data = pd.read_excel(file_name, encoding='utf-8')
     data.loc[1, 'activate_count'] = activate_num
     data.loc[1, 'time'] = bag_count * 5
     return
@@ -84,7 +84,7 @@ def CountMEBTimes(file_path, file_name):
             except:
                 continue
             if meb_active == 4 and is_active == False:
-                data = pd.read_excel(file_name)
+                data = pd.read_excel(file_name, encoding='utf-8')
                 data_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(t.to_sec()))
                 num = data.shape[0]
                 data.loc[num, 'NO'] = num + 1
@@ -101,7 +101,7 @@ def CountMEBTimes(file_path, file_name):
                 activate_num += 1
             if meb_active == 2 and is_active == True:
                 is_active = False
-    data = pd.read_excel(file_name)
+    data = pd.read_excel(file_name, encoding='utf-8')
     data.loc[1, 'activate_count'] = activate_num
     data.loc[1, 'time'] = bag_count * 5
     return

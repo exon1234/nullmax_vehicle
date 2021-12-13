@@ -109,7 +109,7 @@ class KPIWindows(QWidget):
         self.mainwindows.show()
 
 
-# 实车感知问题分析
+# 实车感知问
 @singleton
 class PerceptionWindows(QWidget):
     def __init__(self):

@@ -3,7 +3,6 @@ import os
 import time
 
 import pandas as pd
-
 import utils
 
 
@@ -41,7 +40,7 @@ def cipv_front_error(file_path, file_name):
                 if now_time - last_time < 1.5 or obstacel_in_path_x > 80:
                     continue
                 last_time = now_time
-                data = pd.read_excel(file_name)
+                data = pd.read_excel(file_name, encoding='utf-8')
                 data_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(t.to_sec()))
                 num = data.shape[0]
                 data.loc[num, 'NO'] = num + 1
@@ -75,7 +74,7 @@ def cipv_front_lost(file_path, file_name):
                         if tracks[i].id == new_cipv_id:
                             last_problem_time = now_time
                             cipv_x = tracks[i].position.x
-                            data = pd.read_excel(file_name)
+                            data = pd.read_excel(file_name, encoding='utf-8')
                             data_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(t.to_sec()))
                             num = data.shape[0]
                             data.loc[num, 'NO'] = num + 1
@@ -221,32 +220,31 @@ def cipv_velocity(file_path, file_name):
     except:
         pass
 
-
-@utils.register('tracking问题', 'perception')
-def get_tracking_problems(file_path, file_name):
-    last_tracks = []
-    topic_list = ['/input/perception/obstacle_list', '/perception/obstacle_list']
-    for topic, msg, t, bag_path, bag_count in utils.get_bag_msg(file_path, topic_list):
-        if topic == '/input/perception/obstacle_list' or topic == '/perception/obstacle_list':
-            tracks = msg.tracks
-            now_time = t.to_sec()
-            if len(tracks) == len(last_tracks):
-                tracks_id = [x.id for x in tracks]
-                for temp in last_tracks:
-                    if temp.id not in tracks_id:
-                        area = temp.uv_bbox2d.size.x * temp.uv_bbox2d.size.y
-                        distance_x = temp.position_std.x
-                        distance_y = temp.position_std.y
-                        if area > 9216 and distance_x < 80 and abs(distance_y) < 10:
-                            data = pd.read_excel(file_name)
-                            data_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(t.to_sec()))
-                            num = data.shape[0]
-                            data.loc[num, 'NO'] = num + 1
-                            data.loc[num, 'Date'] = data_time.split(' ')[0]
-                            data.loc[num, 'BagPath'] = bag_path
-                            data.loc[num, 'Time'] = data_time.split(' ')[1]
-                            data.loc[num, 'Problem'] = 'tracking有误'
-                            data.loc[num, 'ID'] = temp.id
-                            data.loc[num, 'Obstracel_X'] = distance_x
-                            data.to_excel(file_name, index=False, engine='openpyxl')
-            last_tracks = tracks
+# @utils.register('tracking问题', 'perception')
+# def get_tracking_problems(file_path, file_name):
+#     last_tracks = []
+#     topic_list = ['/input/perception/obstacle_list', '/perception/obstacle_list']
+#     for topic, msg, t, bag_path, bag_count in utils.get_bag_msg(file_path, topic_list):
+#         if topic == '/input/perception/obstacle_list' or topic == '/perception/obstacle_list':
+#             tracks = msg.tracks
+#             now_time = t.to_sec()
+#             if len(tracks) == len(last_tracks):
+#                 tracks_id = [x.id for x in tracks]
+#                 for temp in last_tracks:
+#                     if temp.id not in tracks_id:
+#                         area = temp.uv_bbox2d.size.x * temp.uv_bbox2d.size.y
+#                         distance_x = temp.position_std.x
+#                         distance_y = temp.position_std.y
+#                         if area > 9216 and distance_x < 80 and abs(distance_y) < 10:
+#                             data = pd.read_excel(file_name, encoding='utf-8')
+#                             data_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(t.to_sec()))
+#                             num = data.shape[0]
+#                             data.loc[num, 'NO'] = num + 1
+#                             data.loc[num, 'Date'] = data_time.split(' ')[0]
+#                             data.loc[num, 'BagPath'] = bag_path
+#                             data.loc[num, 'Time'] = data_time.split(' ')[1]
+#                             data.loc[num, 'Problem'] = 'tracking有误'
+#                             data.loc[num, 'ID'] = temp.id
+#                             data.loc[num, 'Obstracel_X'] = distance_x
+#                             data.to_excel(file_name, index=False, engine='openpyxl')
+#             last_tracks = tracks
