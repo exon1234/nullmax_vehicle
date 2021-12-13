@@ -28,7 +28,7 @@ class Config:
             "iou": 0.5,
             "enum_obstacle": {0: 'car', 1: 'truck', 2: 'bus', 3: 'pedestrian', 4: 'bicycle', 5: 'motorcycle',
                               6: 'tricycle', 7: 'rider', 8: 'cone', 9: 'barrier', 10: 'sign', 11: 'TRAFFIC_LIGHT'},
-            "analy_obstacle": ['car', 'truck', 'bus', 'pedestrian', 'bicycle', 'motorcycle', 'tricycle', 'rider',
-                               'other']
+            "analyze_obstacle": ['car', 'truck', 'bus', 'pedestrian', 'bicycle', 'motorcycle', 'tricycle', 'rider'],
+            "SML_obstacle_cfg": {'small': [0, 1024], 'middle': [1024, 9216], 'large': [9216, 200000]}
         }
         return configs

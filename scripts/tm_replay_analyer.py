@@ -13,14 +13,11 @@ from jyftools import *
 
 
 def get_replay_result(label_jsons, perce_jsons, func_list):
-    file_name = utils.BASIC_NAME + "replay" + '.xlsx'
+    file_name = utils.BASIC_NAME + "KPI" + '.xlsx'
     pd.set_option('display.unicode.ambiguous_as_wide', True)
     pd.set_option('display.unicode.east_asian_width', True)
     pd.set_option('display.max_columns', 500)
     pd.set_option('display.width', 500)
-    # if not os.path.exists(file_name):
-    #     df = pd.DataFrame(columns=['NO', 'Date', 'Time', 'Problem'], index=None)
-    #     df.to_excel(file_name, index=False, engine='openpyxl')
     for func in func_list:
         eval(func)(label_jsons, perce_jsons, file_name)
 
@@ -32,17 +29,14 @@ def get_recall_side(label_jsons, perce_jsons, file_name):
         print('无2d检测标注数据')
         return
     configs = Config.replay_configs()
-    enum_obstacle_type = configs["enum_obstacle"]
-    ''' result_recall_demo = [label_num,true_num,false_num]'''
-    result_car = [0, 0, 0]
-    result_truck = [0, 0, 0]
-    result_bus = [0, 0, 0]
-    result_pedestrian = [0, 0, 0]
-    result_bicycle = [0, 0, 0]
-    result_motorcycle = [0, 0, 0]
-    result_tricycle = [0, 0, 0]
-    result_rider = [0, 0, 0]
-    result_other = [0, 0, 0]
+    enum_obstacle_type, analyze_obstacle_type = configs["enum_obstacle"], configs["analyze_obstacle"]
+    df = pd.DataFrame(columns=['KPI'] + analyze_obstacle_type + ['other_type'])
+    row = df.shape[0]
+    df.loc[row + 0, 'KPI'] = '标注数量'
+    df.loc[row + 1, 'KPI'] = '检出正确'
+    df.loc[row + 2, 'KPI'] = '检出错误'
+    df.loc[row + 3, 'KPI'] = '召回率'
+    df.fillna(0, inplace=True)
 
     for label_result, perce_result in utils.get_match_img_one_json(label_jsons, perce_jsons):
         if not label_result or not perce_result:
@@ -52,52 +46,37 @@ def get_recall_side(label_jsons, perce_jsons, file_name):
                 continue
             label_type = label_data['tags']["class"]
             perce_type = None if not perce_data else enum_obstacle_type[perce_data["obstacle_type"]]
-            try:
-                result = eval('result_' + label_type)
-                result[0] += 1
-            except NameError as E:
-                result = result_other
-                result[0] += 1
+            result_type = label_type if label_type in analyze_obstacle_type else 'other_type'
+            df.iloc[row + 0, df.columns.get_loc(result_type)] += 1
             if perce_type and perce_type == label_type:
-                result[1] += 1
+                df.iloc[row + 1, df.columns.get_loc(result_type)] += 1
             elif perce_type:
-                result[2] += 1
-
-    is_duplicate = False
-    print('-*-' * 50)
-    for value in enum_obstacle_type.values():
-        try:
-            result = eval('result_' + value)
-        except NameError as E:
-            if is_duplicate:
-                continue
-            is_duplicate = True
-            value = 'other'
-            result = result_other
-            continue
-        obstacle_recall = 0 if result[0] == 0 else float(result[1] + result[2]) / result[0]
-        utils.logger.info(
-            '{}'.format(value).ljust(12, ' ') + 'recall: {}  {}'.format(round(obstacle_recall, 3), result))
+                df.iloc[row + 2, df.columns.get_loc(result_type)] += 1
+    df['all_type'] = df.iloc[:, 1:-2].apply(lambda x: x.sum(), axis=1)
+    df.iloc[row + 3, 1:] = df.iloc[:, 1:].apply(
+        lambda x: 0 if not x[0] else "%.1f" % (100 * (x[1] + x[2]) / float(x[0])))
+    print('-·-' * 30)
+    print(df)
+    if os.path.exists(file_name):
+        raw_df = pd.read_excel(file_name, encoding='utf-8')
+        df = pd.concat([raw_df, df], sort=False)
+    df.to_excel(file_name, index=False, engine='openpyxl')
 
 
 @utils.register('环视-precision', 'KPI')
 def get_precision_side(label_jsons, perce_jsons, file_name):
     '''精确率获取'''
     if not label_jsons or len(label_jsons) != 1 or not perce_jsons[0].endswith('.json'):
-        print('无可用检测标注数据')
+        print('无2d检测标注数据')
         return
     configs = Config.replay_configs()
-    enum_obstacle_type = configs["enum_obstacle"]
-    '''result_recall_demo = [label_num,TP,FP]'''
-    result_car = [0, 0, 0]
-    result_truck = [0, 0, 0]
-    result_bus = [0, 0, 0]
-    result_pedestrian = [0, 0, 0]
-    result_bicycle = [0, 0, 0]
-    result_motorcycle = [0, 0, 0]
-    result_tricycle = [0, 0, 0]
-    result_rider = [0, 0, 0]
-    result_other = [0, 0, 0]
+    enum_obstacle_type, analyze_obstacle_type = configs["enum_obstacle"], configs["analyze_obstacle"]
+    df = pd.DataFrame(columns=['KPI'] + analyze_obstacle_type + ['other_type'])
+    row = df.shape[0]
+    df.loc[row + 0, 'KPI'] = '正确检出'
+    df.loc[row + 1, 'KPI'] = '错误检出'
+    df.loc[row + 2, 'KPI'] = '精确率'
+    df.fillna(0, inplace=True)
 
     for label_result, perce_result in utils.get_match_img_one_json(label_jsons, perce_jsons):
         if not perce_result:
@@ -107,31 +86,19 @@ def get_precision_side(label_jsons, perce_jsons, file_name):
                 continue
             perce_type = enum_obstacle_type[perce_data["obstacle_type"]]
             label_type = label_data['tags']["class"] if label_data else None
-            try:
-                result = eval('result_' + perce_type)
-            except NameError as E:
-                result = result_other
-
+            result_type = perce_type if perce_type in analyze_obstacle_type else 'other_type'
             if perce_type == label_type:
-                result[1] += 1
-            else:
-                result[2] += 1
-
-    is_duplicate = False
-    print('-*-' * 50)
-    for value in enum_obstacle_type.values():
-        try:
-            result = eval('result_' + value)
-        except:
-            if is_duplicate:
-                continue
-            value = 'other'
-            result = result_other
-            is_duplicate = True
-            continue
-        obstacle_precision = 0 if result[1] + result[2] == 0 else float(result[1]) / (result[2] + result[1])
-        utils.logger.info(
-            '{}'.format(value).ljust(12, ' ') + 'precision: {}  {}'.format(round(obstacle_precision, 3), result))
+                df.iloc[row + 0, df.columns.get_loc(result_type)] += 1
+            elif perce_type:
+                df.iloc[row + 1, df.columns.get_loc(result_type)] += 1
+    df['all_type'] = df.iloc[:, 1:-2].apply(lambda x: x.sum(), axis=1)
+    df.iloc[row + 2, 1:] = df.iloc[:, 1:].apply(lambda x: 0 if not x[0] else "%.1f" % (100 * x[0] / float(x[0] + x[1])))
+    print('-·-' * 30)
+    print(df)
+    if os.path.exists(file_name):
+        raw_df = pd.read_excel(file_name, encoding='utf-8')
+        df = pd.concat([raw_df, df], sort=False)
+    df.to_excel(file_name, index=False, engine='openpyxl')
 
 
 @utils.register('环视-测距', 'KPI')
@@ -399,18 +366,19 @@ def label_get_all_recall(label_jsons, perce_jsons, file_name):
     '''
     召回率获取
     '''
-    if not label_jsons:
-        return
-    if len(label_jsons) > 1:
-        print('召回率无可用标注数据')
+    if not label_jsons or len(label_jsons) > 1:
+        print('无2d检测标注数据')
         return
     configs = Config.replay_configs()
-    enum_obstacle_type = configs["enum_obstacle"]
-    ''' result_recall_demo = [label_num,true_num,false_num]'''
-    result_small = [0, 0, 0]
-    result_middle = [0, 0, 0]
-    result_large = [0, 0, 0]
-    result_other = [0, 0, 0]
+    enum_obstacle_type, analyze_obstacle_type = configs["enum_obstacle"], configs["analyze_obstacle"]
+    SML_obstacle_threshold = configs["SML_obstacle_cfg"]
+    df = pd.DataFrame(columns=['KPI'] + list(SML_obstacle_threshold.keys()) + ['other_obstacle'])
+    row = df.shape[0]
+    df.loc[row + 0, 'KPI'] = '标注数量'
+    df.loc[row + 1, 'KPI'] = '检出正确'
+    df.loc[row + 2, 'KPI'] = '检出错误'
+    df.loc[row + 3, 'KPI'] = '召回率'
+    df.fillna(0, inplace=True)
 
     for label_result, perce_result in utils.get_match_img_one_json(label_jsons, perce_jsons):
         if not label_result or not perce_result:
@@ -419,48 +387,45 @@ def label_get_all_recall(label_jsons, perce_jsons, file_name):
             if not label_data:
                 continue
             label_type = label_data['tags']["class"]
-            if not perce_data:
-                perce_type = None
-            else:
-                perce_type = enum_obstacle_type[perce_data["obstacle_type"]]
+            perce_type = None if not perce_data else enum_obstacle_type[perce_data["obstacle_type"]]
             area = label_data['tags']['height'] * label_data['tags']['width'] / 9
-            if label_type == 'wheel':
-                result = result_other
-            elif area < 1024:
-                result = result_small
-            elif area < 9216:
-                result = result_middle
-            else:
-                result = result_large
-            result[0] += 1
+            result_type = label_type if label_type in analyze_obstacle_type else 'other_obstacle'
+            for obstacle, threshold in SML_obstacle_threshold.items():
+                if threshold[0] < area <= threshold[1] and result_type != 'other_obstacle':
+                    result_type = obstacle
+            df.iloc[row, df.columns.get_loc(result_type)] += 1
             if perce_type and perce_type == label_type:
-                result[1] += 1
+                df.iloc[row + 1, df.columns.get_loc(result_type)] += 1
             elif perce_type:
-                result[2] += 1
-    print('-*-' * 50)
-    for key, value in {'small': result_small, 'middle': result_middle, 'large': result_large,
-                       'wheel': result_other}.items():
-        obstacle_recall = 0 if value[0] == 0 else float(value[1] + value[2]) / value[0]
-        utils.logger.info('{}'.format(key).ljust(10, ' ') + '{}  recall: {}'.format(value, obstacle_recall))
+                df.iloc[row + 2, df.columns.get_loc(result_type)] += 1
+    df['all'] = df.iloc[:, 1:-2].apply(lambda x: x.sum(), axis=1)
+    df.iloc[row + 3, 1:] = df.iloc[:, 1:].apply(
+        lambda x: 0 if not x[0] else "%.1f" % (100 * (x[1] + x[2]) / float(x[0])))
+    print('-·-' * 30)
+    print(df)
+    if os.path.exists(file_name):
+        raw_df = pd.read_excel(file_name, encoding='utf-8')
+        df = pd.concat([raw_df, df], sort=False)
+    df.to_excel(file_name, index=False, engine='openpyxl')
 
 
 @utils.register('S/M/L-precision', 'KPI')
 def label_get_all_precision(label_jsons, perce_jsons, file_name):
     '''
-    所有精确率获取
-    环视、前视相机不同时修改enum_obstacle_type即可
+    精确率获取
     '''
-    if not label_jsons:
-        return
-    if len(label_jsons) > 1:
-        print('精确率无可用标注数据')
+    if not label_jsons or len(label_jsons) > 1:
+        print('无2d检测标注数据')
         return
     configs = Config.replay_configs()
-    enum_obstacle_type = configs["enum_obstacle"]
-    '''result_recall_demo = [label_num,TP,FP]'''
-    result_small = [0, 0, 0]
-    result_middle = [0, 0, 0]
-    result_large = [0, 0, 0]
+    enum_obstacle_type, analyze_obstacle_type = configs["enum_obstacle"], configs["analyze_obstacle"]
+    SML_obstacle_threshold = configs["SML_obstacle_cfg"]
+    df = pd.DataFrame(columns=['KPI'] + list(SML_obstacle_threshold.keys()) + ['other_obstacle'])
+    row = df.shape[0]
+    df.loc[row + 0, 'KPI'] = '正确检出'
+    df.loc[row + 1, 'KPI'] = '错误检出'
+    df.loc[row + 2, 'KPI'] = '精确率'
+    df.fillna(0, inplace=True)
 
     for label_result, perce_result in utils.get_match_img_one_json(label_jsons, perce_jsons):
         if not perce_result:
@@ -468,27 +433,26 @@ def label_get_all_precision(label_jsons, perce_jsons, file_name):
         for label_data, perce_data in utils.get_match_obstacle_precision_side(label_result, perce_result):
             if not perce_data:
                 continue
-            else:
-                perce_type = enum_obstacle_type[perce_data["obstacle_type"]]
-            if label_data:
-                label_type = label_data['tags']["class"]
-            else:
-                label_type = None
+            perce_type = enum_obstacle_type[perce_data["obstacle_type"]]
+            label_type = None if not label_data else label_data['tags']["class"]
             area = perce_data["uv_bbox2d"]["obstacle_bbox.width"] * perce_data["uv_bbox2d"]["obstacle_bbox.height"]
-            if area < 1024:
-                result = result_small
-            elif area < 9216:
-                result = result_middle
-            else:
-                result = result_large
+            result_type = perce_type if perce_type in analyze_obstacle_type else 'other_obstacle'
+            for obstacle, threshold in SML_obstacle_threshold.items():
+                if threshold[0] < area <= threshold[1] and result_type != 'other_obstacle':
+                    result_type = obstacle
             if perce_type == label_type:
-                result[1] += 1
-            else:
-                result[2] += 1
-    print('-*-' * 50)
-    for key, value in {'small': result_small, 'middle': result_middle, 'large': result_large}.items():
-        obstacle_precision = 0 if value[1] + value[2] == 0 else float(value[1]) / (value[2] + value[1])
-        utils.logger.info('{}'.format(key).ljust(10, ' ') + '{}  precision: {}'.format(value, obstacle_precision))
+                df.iloc[row + 0, df.columns.get_loc(result_type)] += 1
+            elif perce_type:
+                df.iloc[row + 1, df.columns.get_loc(result_type)] += 1
+    df['all'] = df.iloc[:, 1:-2].apply(lambda x: x.sum(), axis=1)
+    df.iloc[row + 2, 1:] = df.iloc[:, 1:].apply(
+        lambda x: 0 if not x[0] else "%.1f" % (100 * x[0] / float(x[0] + x[1])))
+    print('-·-' * 30)
+    print(df)
+    if os.path.exists(file_name):
+        raw_df = pd.read_excel(file_name, encoding='utf-8')
+        df = pd.concat([raw_df, df], sort=False)
+    df.to_excel(file_name, index=False, engine='openpyxl')
 
 
 @utils.register('漏检问题筛选', 'KPI')
@@ -533,6 +497,7 @@ def get_problems_lost(label_jsons, perce_jsons, file_name):
     problem_json_data.sort(key=lambda x: x[0].rsplit('/', 1)[-1].rsplit('.')[0].rsplit('_')[-1].zfill(6))
     problem_json_data.sort(key=lambda x: x[0].rsplit('/', 1)[0])
     df_problems = pd.DataFrame(problem_json_data, columns=['image', 'obstacle_id', 'Problem'])
+    file_name = file_name.replace("KPI", 'replay')
     if os.path.exists(file_name):
         df_problems = pd.concat([pd.read_excel(file_name), df_problems])
     df_problems.to_excel(file_name, index=False, engine='openpyxl')
@@ -582,6 +547,7 @@ def get_problems_err(label_jsons, perce_jsons, file_name):
     problem_json_data.sort(key=lambda x: x[0].rsplit('/', 1)[-1].rsplit('.')[0].rsplit('_')[-1].zfill(6))
     problem_json_data.sort(key=lambda x: x[0].rsplit('/', 1)[0])
     df_problems = pd.DataFrame(problem_json_data, columns=['image', 'obstacle_id', 'Problem'])
+    file_name = file_name.replace("KPI", 'replay')
     if os.path.exists(file_name):
         df_problems = pd.concat([pd.read_excel(file_name), df_problems])
     df_problems.to_excel(file_name, index=False, engine='openpyxl')
