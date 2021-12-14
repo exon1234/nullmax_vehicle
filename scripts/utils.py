@@ -7,6 +7,7 @@ import json
 from datetime import datetime
 import cv2
 import rosbag
+import pandas as pd
 
 from config.cfg import Config
 
@@ -31,6 +32,21 @@ def init_logger():
     logger.addHandler(fh)
     logger.addHandler(stream_handler)
     return logger
+
+
+def write_to_excel(df, file_name, sheet_name):
+    print('-·-' * 30)
+    print(df)
+    writer = pd.ExcelWriter(file_name)
+    if os.path.exists(file_name):
+        raw_df = pd.read_excel(file_name, sheet_name=None, encoding='utf-8')
+        for sheet, data in raw_df.items():
+            if sheet == sheet_name:
+                df = pd.concat([data, df], sort=False)
+            else:
+                data.to_excel(excel_writer=writer, sheet_name=sheet, index=False, engine='openpyxl')
+    df.to_excel(excel_writer=writer, sheet_name=sheet_name, index=False, engine='openpyxl')
+    writer.save()
 
 
 def get_all_files(path, file_extension):
@@ -337,7 +353,7 @@ def get_match_obstacle_precision_side(label_result, perce_result):
                     yield None, perce_data
 
 
-def get_match_obstacle_more(label_result, perce_result):
+def get_match_obstacle_2d(label_result, perce_result):
     '''多文件目标障碍物匹配'''
     perce_result = perce_result["tracks"]
     configs = Config.replay_configs()

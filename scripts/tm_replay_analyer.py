@@ -3,8 +3,6 @@ import copy
 from hashlib import md5
 import json
 import shutil
-from datetime import datetime
-import cv2
 import tqdm
 
 from config.cfg import Config
@@ -30,7 +28,7 @@ def get_recall_side(label_jsons, perce_jsons, file_name):
         return
     configs = Config.replay_configs()
     enum_obstacle_type, analyze_obstacle_type = configs["enum_obstacle"], configs["analyze_obstacle"]
-    df = pd.DataFrame(columns=['KPI'] + analyze_obstacle_type + ['other_type'])
+    df = pd.DataFrame(columns=['KPI'] + analyze_obstacle_type + ['other'])
     row = df.shape[0]
     df.loc[row + 0, 'KPI'] = '标注数量'
     df.loc[row + 1, 'KPI'] = '检出正确'
@@ -46,21 +44,18 @@ def get_recall_side(label_jsons, perce_jsons, file_name):
                 continue
             label_type = label_data['tags']["class"]
             perce_type = None if not perce_data else enum_obstacle_type[perce_data["obstacle_type"]]
-            result_type = label_type if label_type in analyze_obstacle_type else 'other_type'
+            result_type = label_type if label_type in analyze_obstacle_type else 'other'
+
             df.iloc[row + 0, df.columns.get_loc(result_type)] += 1
             if perce_type and perce_type == label_type:
                 df.iloc[row + 1, df.columns.get_loc(result_type)] += 1
             elif perce_type:
                 df.iloc[row + 2, df.columns.get_loc(result_type)] += 1
+
     df['all_type'] = df.iloc[:, 1:-2].apply(lambda x: x.sum(), axis=1)
     df.iloc[row + 3, 1:] = df.iloc[:, 1:].apply(
         lambda x: 0 if not x[0] else "%.1f" % (100 * (x[1] + x[2]) / float(x[0])))
-    print('-·-' * 30)
-    print(df)
-    if os.path.exists(file_name):
-        raw_df = pd.read_excel(file_name, encoding='utf-8')
-        df = pd.concat([raw_df, df], sort=False)
-    df.to_excel(file_name, index=False, engine='openpyxl')
+    utils.write_to_excel(df=df, file_name=file_name, sheet_name='type')
 
 
 @utils.register('环视-precision', 'KPI')
@@ -71,7 +66,7 @@ def get_precision_side(label_jsons, perce_jsons, file_name):
         return
     configs = Config.replay_configs()
     enum_obstacle_type, analyze_obstacle_type = configs["enum_obstacle"], configs["analyze_obstacle"]
-    df = pd.DataFrame(columns=['KPI'] + analyze_obstacle_type + ['other_type'])
+    df = pd.DataFrame(columns=['KPI'] + analyze_obstacle_type + ['other'])
     row = df.shape[0]
     df.loc[row + 0, 'KPI'] = '正确检出'
     df.loc[row + 1, 'KPI'] = '错误检出'
@@ -86,42 +81,38 @@ def get_precision_side(label_jsons, perce_jsons, file_name):
                 continue
             perce_type = enum_obstacle_type[perce_data["obstacle_type"]]
             label_type = label_data['tags']["class"] if label_data else None
-            result_type = perce_type if perce_type in analyze_obstacle_type else 'other_type'
+            result_type = perce_type if perce_type in analyze_obstacle_type else 'other'
             if perce_type == label_type:
                 df.iloc[row + 0, df.columns.get_loc(result_type)] += 1
             elif perce_type:
                 df.iloc[row + 1, df.columns.get_loc(result_type)] += 1
     df['all_type'] = df.iloc[:, 1:-2].apply(lambda x: x.sum(), axis=1)
     df.iloc[row + 2, 1:] = df.iloc[:, 1:].apply(lambda x: 0 if not x[0] else "%.1f" % (100 * x[0] / float(x[0] + x[1])))
-    print('-·-' * 30)
-    print(df)
-    if os.path.exists(file_name):
-        raw_df = pd.read_excel(file_name, encoding='utf-8')
-        df = pd.concat([raw_df, df], sort=False)
-    df.to_excel(file_name, index=False, engine='openpyxl')
+    utils.write_to_excel(df=df, file_name=file_name, sheet_name='type')
 
 
 @utils.register('环视-测距', 'KPI')
-def get_distance_side(label_jsons, perce_jsons, file_name):
+def get_ranging_side(label_jsons, perce_jsons, file_name):
     '''测距效果获取'''
-    # ranges = ('0 ~ 20m', '20 ~ 35m', '35 ~ 60m')
-    result_car = ([[], [], [], []], [[], [], [], []])
-    result_truck = ([[], [], [], []], [[], [], [], []])
-    result_bus = ([[], [], [], []], [[], [], [], []])
-    result_ped = ([[], [], [], []], [[], [], [], []])
-    result_bicycle = ([[], [], [], []], [[], [], [], []])
-    result_motocycle = ([[], [], [], []], [[], [], [], []])
-    result_tricycle = ([[], [], [], []], [[], [], [], []])
-    result_other = ([[], [], [], []], [[], [], [], []])
-    configs = Config.replay_configs()
-    enum_obstacle_type = configs["enum_obstacle"]
     if not label_jsons or len(label_jsons) <= 1 or not perce_jsons[0].endswith('.json'):
         print('无可用测距标注数据')
         return
+
+    configs = Config.replay_configs()
+    enum_obstacle_type, analyze_obstacle_type = configs["enum_obstacle"], configs["analyze_obstacle"]
+    enum_obstacle_x, enum_obstacle_y = configs["ranging_obstacle_x"], configs["ranging_obstacle_y"]
+    columns = ['obstacle', 'Dx'] + list(enum_obstacle_y.keys()) + [x + '_count' for x in enum_obstacle_y.keys()]
+    index = ['_'.join([x, y]) for x in analyze_obstacle_type for y in enum_obstacle_x.keys()]
+
+    df = pd.DataFrame(columns=columns, index=index)
+    df['obstacle'] = [x.split('_')[0] for x in index]
+    df['Dx'] = [x.split('_')[1] for x in index]
+    df.fillna(0, inplace=True)
+
     for label_result, perce_result in utils.get_match_img_more_json(label_jsons, perce_jsons):
         if not label_result or not perce_result:
             continue
-        for label_data, perce_data in utils.get_match_obstacle_more(label_result, perce_result):
+        for label_data, perce_data in utils.get_match_obstacle_2d(label_result, perce_result):
             if not perce_data or perce_data['obstacle_valid'] == 0:
                 continue
             label_type = enum_obstacle_type[label_data['type']]
@@ -131,44 +122,25 @@ def get_distance_side(label_jsons, perce_jsons, file_name):
             perce_position_y = perce_data["position"]['obstacle_pos_y_filter']
             distance_tolerance_x = abs(perce_position_x - label_position_x)
             distance_tolerance_y = abs(perce_position_y - label_position_y)
-            try:
-                result = eval('result_' + label_type)
-            except:
-                result = result_other
-            if label_position_x <= 20:
-                result[0][0].append(distance_tolerance_x)
-            if label_position_x <= 35:
-                result[0][1].append(distance_tolerance_x)
-            if label_position_x <= 60:
-                result[0][2].append(distance_tolerance_x)
-            if label_position_x > 60:
-                result[0][3].append(distance_tolerance_x)
+            result_type = label_type if label_type in analyze_obstacle_type else 'other'
+            for index_key, threshold_x in enum_obstacle_x.items():
+                if not threshold_x[0] < distance_tolerance_x <= threshold_x[1] or result_type == 'other':
+                    continue
+                for columns_key, threshold_y in enum_obstacle_y.items():
+                    if threshold_y[0] < distance_tolerance_y <= threshold_y[1] and columns_key != 'ego_lane':
+                        index_name = "_".join([result_type, index_key])
+                        df.loc[index_name, columns_key] += distance_tolerance_y
+                        df.loc[index_name, columns_key + '_count'] += 1
+                    elif threshold_y[0] < distance_tolerance_y <= threshold_y[1] and columns_key != 'ego_lane':
+                        index_name = "_".join([result_type, index_key])
+                        df.loc[index_name, columns_key] += distance_tolerance_y
+                        df.loc[index_name, columns_key + '_count'] += 1
 
-            if label_position_y <= 20:
-                result[1][0].append(distance_tolerance_y)
-            if label_position_y <= 35:
-                result[1][1].append(distance_tolerance_y)
-            if label_position_y <= 60:
-                result[1][2].append(distance_tolerance_y)
-            if label_position_y > 60:
-                result[0][3].append(distance_tolerance_y)
-    utils.logger.info('type    0~20  20~35  35~60')
-    for value in enum_obstacle_type.values():
-        try:
-            result = eval('result_' + value)
-        except:
-            value = 'other'
-            result = result_other
-        finally:
-            result[0][0] = 0 if not result[0][0] else sum(result[0][0]) / len(result[0][0])
-            result[0][1] = 0 if not result[0][1] else sum(result[0][1]) / len(result[0][1])
-            result[0][2] = 0 if not result[0][2] else sum(result[0][2]) / len(result[0][2])
-            result[1][0] = 0 if not result[1][0] else sum(result[1][0]) / len(result[1][0])
-            result[1][1] = 0 if not result[1][1] else sum(result[1][1]) / len(result[1][1])
-            result[1][2] = 0 if not result[1][2] else sum(result[1][2]) / len(result[1][2])
-            utils.logger.info(
-                '{}'.format(value).ljust(10, ' ') + '{}  {}  {}'.format(round(result[0][0], 2), round(result[0][1], 2),
-                                                                        round(result[0][2], 2)))
+    for column_key in enum_obstacle_y.keys():
+        df[column_key] = df[column_key] / df[column_key + '_count']
+        df[column_key] = pd.to_numeric(df[column_key].apply(lambda x: '%.2f' % x), errors='coerce')
+    df.fillna(0, inplace=True)
+    utils.write_to_excel(df=df, file_name=file_name, sheet_name='distance')
 
 
 @utils.register('环视-测速', 'KPI')
@@ -193,7 +165,7 @@ def get_velocity_side(label_jsons, perce_jsons, file_name):
     for label_result, perce_result in utils.get_match_img_more_json(label_jsons, perce_jsons):
         if not label_result or not perce_result:
             continue
-        for label_data, perce_data in utils.get_match_obstacle_more(label_result, perce_result):
+        for label_data, perce_data in utils.get_match_obstacle_2d(label_result, perce_result):
 
             if not perce_data:
                 continue
@@ -264,7 +236,7 @@ def get_accel_side(label_jsons, perce_jsons, file_name):
     for label_result, perce_result in utils.get_match_img_more_json(label_jsons, perce_jsons):
         if not label_result or not perce_result:
             continue
-        for label_data, perce_data in utils.get_match_obstacle_more(label_result, perce_result):
+        for label_data, perce_data in utils.get_match_obstacle_2d(label_result, perce_result):
 
             if not perce_data:
                 continue
@@ -372,7 +344,7 @@ def label_get_all_recall(label_jsons, perce_jsons, file_name):
     configs = Config.replay_configs()
     enum_obstacle_type, analyze_obstacle_type = configs["enum_obstacle"], configs["analyze_obstacle"]
     SML_obstacle_threshold = configs["SML_obstacle_cfg"]
-    df = pd.DataFrame(columns=['KPI'] + list(SML_obstacle_threshold.keys()) + ['other_obstacle'])
+    df = pd.DataFrame(columns=['KPI'] + list(SML_obstacle_threshold.keys()) + ['other'])
     row = df.shape[0]
     df.loc[row + 0, 'KPI'] = '标注数量'
     df.loc[row + 1, 'KPI'] = '检出正确'
@@ -389,9 +361,9 @@ def label_get_all_recall(label_jsons, perce_jsons, file_name):
             label_type = label_data['tags']["class"]
             perce_type = None if not perce_data else enum_obstacle_type[perce_data["obstacle_type"]]
             area = label_data['tags']['height'] * label_data['tags']['width'] / 9
-            result_type = label_type if label_type in analyze_obstacle_type else 'other_obstacle'
+            result_type = label_type if label_type in analyze_obstacle_type else 'other'
             for obstacle, threshold in SML_obstacle_threshold.items():
-                if threshold[0] < area <= threshold[1] and result_type != 'other_obstacle':
+                if threshold[0] < area <= threshold[1] and result_type != 'other':
                     result_type = obstacle
             df.iloc[row, df.columns.get_loc(result_type)] += 1
             if perce_type and perce_type == label_type:
@@ -401,12 +373,7 @@ def label_get_all_recall(label_jsons, perce_jsons, file_name):
     df['all'] = df.iloc[:, 1:-2].apply(lambda x: x.sum(), axis=1)
     df.iloc[row + 3, 1:] = df.iloc[:, 1:].apply(
         lambda x: 0 if not x[0] else "%.1f" % (100 * (x[1] + x[2]) / float(x[0])))
-    print('-·-' * 30)
-    print(df)
-    if os.path.exists(file_name):
-        raw_df = pd.read_excel(file_name, encoding='utf-8')
-        df = pd.concat([raw_df, df], sort=False)
-    df.to_excel(file_name, index=False, engine='openpyxl')
+    utils.write_to_excel(df=df, file_name=file_name, sheet_name='SML')
 
 
 @utils.register('S/M/L-precision', 'KPI')
@@ -420,7 +387,7 @@ def label_get_all_precision(label_jsons, perce_jsons, file_name):
     configs = Config.replay_configs()
     enum_obstacle_type, analyze_obstacle_type = configs["enum_obstacle"], configs["analyze_obstacle"]
     SML_obstacle_threshold = configs["SML_obstacle_cfg"]
-    df = pd.DataFrame(columns=['KPI'] + list(SML_obstacle_threshold.keys()) + ['other_obstacle'])
+    df = pd.DataFrame(columns=['KPI'] + list(SML_obstacle_threshold.keys()) + ['other'])
     row = df.shape[0]
     df.loc[row + 0, 'KPI'] = '正确检出'
     df.loc[row + 1, 'KPI'] = '错误检出'
@@ -436,9 +403,9 @@ def label_get_all_precision(label_jsons, perce_jsons, file_name):
             perce_type = enum_obstacle_type[perce_data["obstacle_type"]]
             label_type = None if not label_data else label_data['tags']["class"]
             area = perce_data["uv_bbox2d"]["obstacle_bbox.width"] * perce_data["uv_bbox2d"]["obstacle_bbox.height"]
-            result_type = perce_type if perce_type in analyze_obstacle_type else 'other_obstacle'
+            result_type = perce_type if perce_type in analyze_obstacle_type else 'other'
             for obstacle, threshold in SML_obstacle_threshold.items():
-                if threshold[0] < area <= threshold[1] and result_type != 'other_obstacle':
+                if threshold[0] < area <= threshold[1] and result_type != 'other':
                     result_type = obstacle
             if perce_type == label_type:
                 df.iloc[row + 0, df.columns.get_loc(result_type)] += 1
@@ -447,12 +414,7 @@ def label_get_all_precision(label_jsons, perce_jsons, file_name):
     df['all'] = df.iloc[:, 1:-2].apply(lambda x: x.sum(), axis=1)
     df.iloc[row + 2, 1:] = df.iloc[:, 1:].apply(
         lambda x: 0 if not x[0] else "%.1f" % (100 * x[0] / float(x[0] + x[1])))
-    print('-·-' * 30)
-    print(df)
-    if os.path.exists(file_name):
-        raw_df = pd.read_excel(file_name, encoding='utf-8')
-        df = pd.concat([raw_df, df], sort=False)
-    df.to_excel(file_name, index=False, engine='openpyxl')
+    utils.write_to_excel(df=df, file_name=file_name, sheet_name='SML')
 
 
 @utils.register('漏检问题筛选', 'KPI')
