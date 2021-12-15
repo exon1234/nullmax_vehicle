@@ -31,6 +31,6 @@ class Config:
             "analyze_obstacle": ['car', 'truck', 'bus', 'pedestrian', 'bicycle', 'motorcycle', 'tricycle', 'rider'],
             "SML_obstacle_cfg": {'small': (0, 1024), 'middle': (1024, 9216), 'large': (9216, 200000)},
             "ranging_obstacle_x": {'0~20': (0, 20), '20~35': (20, 35), '35~60': (35, 60)},
-            "ranging_obstacle_y": {'first': (0, 4), 'second': (4, 8), 'third': (8, 12), 'ego_lane': (0,1)}
+            "ranging_obstacle_y": {'first': (0, 4), 'second': (4, 8), 'third': (8, 12), 'ego_lane': (0,1)},
         }
         return configs

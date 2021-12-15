@@ -95,7 +95,7 @@ def get_precision_side(label_jsons, perce_jsons, file_name):
 def get_ranging_side(label_jsons, perce_jsons, file_name):
     '''测距效果获取'''
     if not label_jsons or len(label_jsons) <= 1 or not perce_jsons[0].endswith('.json'):
-        print('无可用测距标注数据')
+        print('无3d检测标注数据')
         return
 
     configs = Config.replay_configs()
@@ -124,16 +124,16 @@ def get_ranging_side(label_jsons, perce_jsons, file_name):
             distance_tolerance_y = abs(perce_position_y - label_position_y)
             result_type = label_type if label_type in analyze_obstacle_type else 'other'
             for index_key, threshold_x in enum_obstacle_x.items():
-                if not threshold_x[0] < distance_tolerance_x <= threshold_x[1] or result_type == 'other':
+                if not threshold_x[0] < label_position_x <= threshold_x[1] or result_type == 'other':
                     continue
                 for columns_key, threshold_y in enum_obstacle_y.items():
-                    if threshold_y[0] < distance_tolerance_y <= threshold_y[1] and columns_key != 'ego_lane':
+                    if threshold_y[0] < label_position_y <= threshold_y[1] and columns_key != 'ego_lane':
                         index_name = "_".join([result_type, index_key])
                         df.loc[index_name, columns_key] += distance_tolerance_y
                         df.loc[index_name, columns_key + '_count'] += 1
-                    elif threshold_y[0] < distance_tolerance_y <= threshold_y[1] and columns_key != 'ego_lane':
+                    elif threshold_y[0] < label_position_y <= threshold_y[1] and columns_key == 'ego_lane':
                         index_name = "_".join([result_type, index_key])
-                        df.loc[index_name, columns_key] += distance_tolerance_y
+                        df.loc[index_name, columns_key] += distance_tolerance_x
                         df.loc[index_name, columns_key + '_count'] += 1
 
     for column_key in enum_obstacle_y.keys():
@@ -145,104 +145,85 @@ def get_ranging_side(label_jsons, perce_jsons, file_name):
 
 @utils.register('环视-测速', 'KPI')
 def get_velocity_side(label_jsons, perce_jsons, file_name):
-    '''测距效果获取'''
-    ranges = ('0 ~ 20m', '20 ~ 35m', '35 ~ 60m')
-    result_car = ([[], [], [], []], [[], [], [], []])
-    result_truck = ([[], [], [], []], [[], [], [], []])
-    result_bus = ([[], [], [], []], [[], [], [], []])
-    result_ped = ([[], [], [], []], [[], [], [], []])
-    result_bicycle = ([[], [], [], []], [[], [], [], []])
-    result_motocycle = ([[], [], [], []], [[], [], [], []])
-    result_tricycle = ([[], [], [], []], [[], [], [], []])
-    result_other = ([[], [], [], []], [[], [], [], []])
+    '''测速效果获取'''
+    if not label_jsons or len(label_jsons) <= 1 or not perce_jsons[0].endswith('.json'):
+        print('无3d检测标注数据')
+        return
+
     configs = Config.replay_configs()
-    enum_obstacle_type = configs["enum_obstacle"]
-    if not label_jsons:
-        return
-    if len(label_jsons) == 1:
-        print('无可用测距标注数据')
-        return
+    enum_obstacle_type, analyze_obstacle_type = configs["enum_obstacle"], configs["analyze_obstacle"]
+    enum_obstacle_x, enum_obstacle_y = configs["ranging_obstacle_x"], configs["ranging_obstacle_y"]
+    columns = ['obstacle', 'Dx','velocity_x','velocity_y','velocity_x_count','velocity_y_count']
+    index = ['_'.join([x, y]) for x in analyze_obstacle_type for y in enum_obstacle_x.keys()]
+
+    df = pd.DataFrame(columns=columns, index=index)
+    df['obstacle'] = [x.split('_')[0] for x in index]
+    df['Dx'] = [x.split('_')[1] for x in index]
+    df.fillna(0, inplace=True)
+
     for label_result, perce_result in utils.get_match_img_more_json(label_jsons, perce_jsons):
         if not label_result or not perce_result:
             continue
         for label_data, perce_data in utils.get_match_obstacle_2d(label_result, perce_result):
-
-            if not perce_data:
-                continue
-            if perce_data['obstacle_valid'] == 0:
+            if not perce_data or perce_data['obstacle_valid'] == 0:
                 continue
             label_type = enum_obstacle_type[label_data['type']]
+            label_position_x = label_data['box_3d']["dists"]['z']
+
             label_velocity_x = label_data['box_3d']["dists"]['z']
             label_velocity_y = label_data['box_3d']["dists"]['x']
+
             perce_velocity_x = perce_data["velocity"]['obstacle_rel_vel_x_filter']
             perce_velocity_y = perce_data["velocity"]['obstacle_rel_vel_y_filter']
-            velocity_tolerance_x = perce_velocity_x - label_velocity_x
-            velocity_tolerance_y = perce_velocity_y - label_velocity_y
 
-            try:
-                result = eval('result_' + label_type)
-            except:
-                result = result_other
-            if label_velocity_x <= 20:
-                result[0][0].append(velocity_tolerance_x)
-            if label_velocity_x <= 35:
-                result[0][1].append(velocity_tolerance_x)
-            if label_velocity_x <= 60:
-                result[0][2].append(velocity_tolerance_x)
+            velocity_tolerance_x = abs(perce_velocity_x - label_velocity_x)
+            velocity_tolerance_y = abs(perce_velocity_y - label_velocity_y)
 
-            if label_velocity_y <= 20:
-                result[1][0].append(velocity_tolerance_y)
-            if label_velocity_y <= 35:
-                result[1][1].append(velocity_tolerance_y)
-            if label_velocity_y <= 60:
-                result[1][2].append(velocity_tolerance_y)
-    utils.logger.info('type    0~20  20~35  35~60')
-    for value in enum_obstacle_type.values():
-        try:
-            result = eval('result_' + value)
-        except:
-            value = 'other'
-            result = result_other
-        finally:
-            result[0][0] = 0 if not result[0][0] else sum(result[0][0]) / len(result[0][0])
-            result[0][1] = 0 if not result[0][1] else sum(result[0][1]) / len(result[0][1])
-            result[0][2] = 0 if not result[0][2] else sum(result[0][2]) / len(result[0][2])
-            result[1][0] = 0 if not result[1][0] else sum(result[1][0]) / len(result[1][0])
-            result[1][1] = 0 if not result[1][1] else sum(result[1][1]) / len(result[1][1])
-            result[1][2] = 0 if not result[1][2] else sum(result[1][2]) / len(result[1][2])
-            utils.logger.info(
-                '{}'.format(value).ljust(10, ' ') + '{}  {}  {}'.format(result[0][0], result[0][1], result[0][2]))
+            result_type = label_type if label_type in analyze_obstacle_type else 'other'
+            for index_key, threshold_x in enum_obstacle_x.items():
+                if threshold_x[0] < label_position_x <= threshold_x[1] and result_type != 'other':
+                    index_name = "_".join([result_type, index_key])
+                    df.loc[index_name, 'velocity_x'] += velocity_tolerance_x
+                    df.loc[index_name, 'velocity_x_count'] += 1
+                    index_name = "_".join([result_type, index_key])
+                    df.loc[index_name, 'velocity_y'] += velocity_tolerance_y
+                    df.loc[index_name, 'velocity_y_count'] += 1
+
+    df['velocity_x'] = df['velocity_x'] / df['velocity_x_count']
+    df['velocity_y'] = df['velocity_y'] / df['velocity_y_count']
+    df['velocity_x'] = pd.to_numeric(df['velocity_x'].apply(lambda x: '%.2f' % x), errors='coerce')
+    df['velocity_y'] = pd.to_numeric(df['velocity_y'].apply(lambda x: '%.2f' % x), errors='coerce')
+    df.fillna(0, inplace=True)
+    utils.write_to_excel(df=df, file_name=file_name, sheet_name='distance')
 
 
 @utils.register('环视-测加速度', 'KPI')
 def get_accel_side(label_jsons, perce_jsons, file_name):
-    '''测距效果获取'''
-    ranges = ('0 ~ 20m', '20 ~ 35m', '35 ~ 60m')
-    result_car = ([[], [], [], []], [[], [], [], []])
-    result_truck = ([[], [], [], []], [[], [], [], []])
-    result_bus = ([[], [], [], []], [[], [], [], []])
-    result_ped = ([[], [], [], []], [[], [], [], []])
-    result_bicycle = ([[], [], [], []], [[], [], [], []])
-    result_motocycle = ([[], [], [], []], [[], [], [], []])
-    result_tricycle = ([[], [], [], []], [[], [], [], []])
-    result_other = ([[], [], [], []], [[], [], [], []])
+    '''测加速度效果获取'''
+    if not label_jsons or len(label_jsons) <= 1 or not perce_jsons[0].endswith('.json'):
+        print('无3d检测标注数据')
+        return
+
     configs = Config.replay_configs()
-    enum_obstacle_type = configs["enum_obstacle"]
-    if not label_jsons:
-        return
-    if len(label_jsons) == 1:
-        print('无可用测距标注数据')
-        return
+    enum_obstacle_type, analyze_obstacle_type = configs["enum_obstacle"], configs["analyze_obstacle"]
+    enum_obstacle_x, enum_obstacle_y = configs["ranging_obstacle_x"], configs["ranging_obstacle_y"]
+    columns = ['obstacle', 'Dx','accel_x','accel_y','accel_x_count','accel_y_count']
+    index = ['_'.join([x, y]) for x in analyze_obstacle_type for y in enum_obstacle_x.keys()]
+
+    df = pd.DataFrame(columns=columns, index=index)
+    df['obstacle'] = [x.split('_')[0] for x in index]
+    df['Dx'] = [x.split('_')[1] for x in index]
+    df.fillna(0, inplace=True)
+
     for label_result, perce_result in utils.get_match_img_more_json(label_jsons, perce_jsons):
         if not label_result or not perce_result:
             continue
         for label_data, perce_data in utils.get_match_obstacle_2d(label_result, perce_result):
-
-            if not perce_data:
-                continue
-            if perce_data['obstacle_valid'] == 0:
+            if not perce_data or perce_data['obstacle_valid'] == 0:
                 continue
             label_type = enum_obstacle_type[label_data['type']]
+            label_position_x = label_data['box_3d']["dists"]['z']
+
             label_accel_x = label_data['box_3d']["dists"]['z']
             label_accel_y = label_data['box_3d']["dists"]['x']
             perce_accel_x = perce_data["accel"]['obstacle_rel_acc_x_filter']
@@ -250,40 +231,22 @@ def get_accel_side(label_jsons, perce_jsons, file_name):
             accel_tolerance_x = perce_accel_x - label_accel_x
             accel_tolerance_y = perce_accel_y - label_accel_y
 
-            try:
-                result = eval('result_' + label_type)
-            except:
-                result = result_other
-            if label_accel_x <= 20:
-                result[0][0].append(accel_tolerance_x)
-            if label_accel_x <= 35:
-                result[0][1].append(accel_tolerance_x)
-            if label_accel_x <= 60:
-                result[0][2].append(accel_tolerance_x)
+            result_type = label_type if label_type in analyze_obstacle_type else 'other'
+            for index_key, threshold_x in enum_obstacle_x.items():
+                if threshold_x[0] < label_position_x <= threshold_x[1] and result_type != 'other':
+                    index_name = "_".join([result_type, index_key])
+                    df.loc[index_name, 'accel_x'] += accel_tolerance_x
+                    df.loc[index_name, 'accel_x_count'] += 1
+                    index_name = "_".join([result_type, index_key])
+                    df.loc[index_name, 'accel_y'] += accel_tolerance_y
+                    df.loc[index_name, 'accel_y_count'] += 1
+    df['accel_x'] = df['accel_x'] / df['accel_x_count']
+    df['accel_y'] = df['accel_y'] / df['accel_y_count']
+    df['accel_x'] = pd.to_numeric(df['accel_x'].apply(lambda x: '%.2f' % x), errors='coerce')
+    df['accel_y'] = pd.to_numeric(df['accel_y'].apply(lambda x: '%.2f' % x), errors='coerce')
+    df.fillna(0, inplace=True)
+    utils.write_to_excel(df=df, file_name=file_name, sheet_name='distance')
 
-            if label_accel_y <= 20:
-                result[1][0].append(accel_tolerance_y)
-            if label_accel_y <= 35:
-                result[1][1].append(accel_tolerance_y)
-            if label_accel_y <= 60:
-                result[1][2].append(accel_tolerance_y)
-
-    utils.logger.info('type    0~20  20~35  35~60')
-    for value in enum_obstacle_type.values():
-        try:
-            result = eval('result_' + value)
-        except:
-            value = 'other'
-            result = result_other
-        finally:
-            result[0][0] = 0 if not result[0][0] else sum(result[0][0]) / len(result[0][0])
-            result[0][1] = 0 if not result[0][1] else sum(result[0][1]) / len(result[0][1])
-            result[0][2] = 0 if not result[0][2] else sum(result[0][2]) / len(result[0][2])
-            result[1][0] = 0 if not result[1][0] else sum(result[1][0]) / len(result[1][0])
-            result[1][1] = 0 if not result[1][1] else sum(result[1][1]) / len(result[1][1])
-            result[1][2] = 0 if not result[1][2] else sum(result[1][2]) / len(result[1][2])
-            utils.logger.info(
-                '{}'.format(value).ljust(10, ' ') + '{}  {}  {}'.format(result[0][0], result[0][1], result[0][2]))
 
 
 @utils.register('问题绘图对比', 'KPI')
@@ -753,48 +716,48 @@ def statistic_range(label_jsons, perce_jsons, file_name):
     new_data.to_excel('./test_result/jiao/statistic_range.xlsx')
 
 
-@utils.register('tracking', 'KPI')
-def get_problem_track(label_jsons, perce_jsons, file_name):
-    pass
-    if not perce_jsons:
-        return
-    perce_jsons = sorted(perce_jsons, key=lambda x: x.rsplit('_', 1)[-1].split('.')[0].zfill(6))
-    perce_jsons = sorted(perce_jsons, key=lambda x: x.rsplit('_', 1)[0])
-    df = pd.DataFrame(columns=['image'], index=None)
-    problem_list = []
-    problem_result_list = []
-    num = df.shape[0]
-    for temp in perce_jsons:
-        num += 1
-        perce_data = utils.get_json_data(temp)
-        tracks = perce_data['tracks']
-        df.loc[num, 'image'] = temp
-        if not tracks:
-            continue
-        for id in tracks.keys():
-            df.loc[num, id] = 1
-    # for column in df.columns[1:]:
-    #     result = df.loc[:, column]
-    #     last_state = -1
-    #     start_num = 1
-    #     for i, j in enumerate(result):
-    #         if str(j) != str(last_state):
-    #             problem_img = df.loc[i + 1, 'image']
-    #             # if (i + 1) - start_num < 10 and i != 0 and i > 10 and problem_img not in problem_list:
-    #             if (i + 1) - start_num < 10 and i != 0 and i > 10 and problem_img not in problem_list and j != 1:
-    #                 problem_list.append(problem_img)
-    #                 problem_result_list.append((problem_img, column))
-    #             last_state = j
-    #             start_num = i + 1
-    # problem_result_list.sort(key=lambda x: x[0].split('_')[-1].zfill(12))
-    # problem_filter_result = []
-    # for temp in problem_result_list:
-    #     img_data = utils.get_json_data(temp[0])["tracks"][temp[1]]
-    #     if img_data["uv_bbox2d"]["obstacle_bbox.height"] * img_data["uv_bbox2d"]["obstacle_bbox.width"] > 960:
-    #         problem_filter_result.append(temp)
-    # filename = os.path.dirname(os.path.dirname(__file__)) + '/data/' + datetime.now().strftime(
-    #     "%Y_%m_%d_") + 'perce_problem' + '.json'
-    # if os.path.exists(filename):
-    #     os.remove(filename)
-    # with open(filename, 'a') as f:
-    #     json.dump(problem_filter_result, f, indent=4)
+# @utils.register('tracking', 'KPI')
+# def get_problem_track(label_jsons, perce_jsons, file_name):
+#     pass
+#     if not perce_jsons:
+#         return
+#     perce_jsons = sorted(perce_jsons, key=lambda x: x.rsplit('_', 1)[-1].split('.')[0].zfill(6))
+#     perce_jsons = sorted(perce_jsons, key=lambda x: x.rsplit('_', 1)[0])
+#     df = pd.DataFrame(columns=['image'], index=None)
+#     problem_list = []
+#     problem_result_list = []
+#     num = df.shape[0]
+#     for temp in perce_jsons:
+#         num += 1
+#         perce_data = utils.get_json_data(temp)
+#         tracks = perce_data['tracks']
+#         df.loc[num, 'image'] = temp
+#         if not tracks:
+#             continue
+#         for id in tracks.keys():
+#             df.loc[num, id] = 1
+#     # for column in df.columns[1:]:
+#     #     result = df.loc[:, column]
+#     #     last_state = -1
+#     #     start_num = 1
+#     #     for i, j in enumerate(result):
+#     #         if str(j) != str(last_state):
+#     #             problem_img = df.loc[i + 1, 'image']
+#     #             # if (i + 1) - start_num < 10 and i != 0 and i > 10 and problem_img not in problem_list:
+#     #             if (i + 1) - start_num < 10 and i != 0 and i > 10 and problem_img not in problem_list and j != 1:
+#     #                 problem_list.append(problem_img)
+#     #                 problem_result_list.append((problem_img, column))
+#     #             last_state = j
+#     #             start_num = i + 1
+#     # problem_result_list.sort(key=lambda x: x[0].split('_')[-1].zfill(12))
+#     # problem_filter_result = []
+#     # for temp in problem_result_list:
+#     #     img_data = utils.get_json_data(temp[0])["tracks"][temp[1]]
+#     #     if img_data["uv_bbox2d"]["obstacle_bbox.height"] * img_data["uv_bbox2d"]["obstacle_bbox.width"] > 960:
+#     #         problem_filter_result.append(temp)
+#     # filename = os.path.dirname(os.path.dirname(__file__)) + '/data/' + datetime.now().strftime(
+#     #     "%Y_%m_%d_") + 'perce_problem' + '.json'
+#     # if os.path.exists(filename):
+#     #     os.remove(filename)
+#     # with open(filename, 'a') as f:
+#     #     json.dump(problem_filter_result, f, indent=4)

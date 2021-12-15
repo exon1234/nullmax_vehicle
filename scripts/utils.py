@@ -176,7 +176,6 @@ def get_json_data(json_file):
         return json_data
 
 
-# 对回放后图片数据与标注数据匹配
 def get_match_img_one_json(label_jsons, perce_jsons):
     '''
     单一标注文件
