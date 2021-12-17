@@ -109,7 +109,7 @@ class KPIWindows(QWidget):
         self.mainwindows.show()
 
 
-# 实车感知问
+# 实车感知问题分析
 @singleton
 class PerceptionWindows(QWidget):
     def __init__(self):
@@ -473,8 +473,7 @@ class RecordWindows(QWidget):
     def InitUI(self):
         self.setWindowTitle('Record Windows')
         self.setGeometry(600, 400, 900, 400)
-        self.names = ['跑偏', '重刹', 'cutin不减速',
-                      '变道超调', '跟车不刹车', '新增问题']
+        self.names = ['跑偏', '重刹', 'cutin不减速', '变道超调', '跟车不刹车', '新增问题']
         self.btn_back = QPushButton('返回主页', self)
         self.btn_flush = QPushButton('更新记录')
         self._problem_list = QTableWidget()
@@ -483,6 +482,8 @@ class RecordWindows(QWidget):
         self.btn_flush.clicked.connect(self.flush_problem_describe)
 
     def InitLayout(self):
+        self.InitComboBox()
+        self.InitComboxLayout()
         global_box = QHBoxLayout()
         w_box = QVBoxLayout(QWidget(self))
         vbox = QVBoxLayout()
@@ -496,11 +497,67 @@ class RecordWindows(QWidget):
             gbox.addWidget(btn, *position)
         vbox.addWidget(self._problem_list)
         vbox.addWidget(self.btn_flush)
-        global_box.addLayout(gbox)
-        global_box.addLayout(vbox)
+        global_box.addLayout(gbox, 1)
+        global_box.addLayout(vbox, 2)
+        w_box.addLayout(self.grib)
         w_box.addLayout(global_box)
         w_box.addWidget(self.btn_back)
         self.setLayout(w_box)
+
+    def InitComboBox(self):
+        self.line_tester = QLineEdit(self)
+        self.line_vehicel = QLineEdit(self)
+        # self.line_MPD = QLineEdit(self)
+        # self.line_MPI = QLineEdit(self)
+        self.line_driving_version = QLineEdit(self)
+        # self.line_planning_version = QLineEdit(self)
+        # self.line_perception_version = QLineEdit(self)
+        self.line_weather = QLineEdit(self)
+        self.line_road_level = QLineEdit(self)
+        # self.line_project = QLineEdit(self)
+        self.line_func = QLineEdit(self)
+        # self.line_position = QLineEdit(self)
+        # self.line_time = QLineEdit(self)
+        # self.line_vehicel_status = QLineEdit(self)
+        # self.line_data_link = QLineEdit(self)
+
+    def InitComboxLayout(self):
+        grid = QGridLayout()
+        grid.addWidget(QLabel('测试人'), 1, 1, 1, 1), grid.addWidget(self.line_tester, 1, 2, 1, 1)
+        grid.addWidget(QLabel('车辆'), 1, 3, 1, 1), grid.addWidget(self.line_vehicel, 1, 4, 1, 1)
+        # grid.addWidget(QLabel('MPD'), 2, 1, 1, 1), grid.addWidget(self.line_MPD, 2, 2, 1, 1)
+        # grid.addWidget(QLabel('MPI'), 2, 3, 1, 1), grid.addWidget(self.line_MPI, 2, 4, 1, 1)
+        grid.addWidget(QLabel('整包版本'), 1, 5, 1, 1), grid.addWidget(self.line_driving_version, 1, 6, 1, 1)
+        # grid.addWidget(QLabel('规划版本'), 3, 3, 1, 1), grid.addWidget(self.line_planning_version, 3, 4, 1, 1)
+        # grid.addWidget(QLabel('感知版本'), 4, 1, 1, 1), grid.addWidget(self.line_perception_version, 4, 2, 1, 1)
+        grid.addWidget(QLabel('天气'), 1, 7, 1, 1), grid.addWidget(self.line_weather, 1, 8, 1, 1)
+        grid.addWidget(QLabel('道路类型'), 1, 9, 1, 1), grid.addWidget(self.line_road_level, 1, 10, 1, 1)
+        # grid.addWidget(QLabel('项目类别'), 5, 3, 1, 1), grid.addWidget(self.line_project, 5, 4, 1, 1)
+        grid.addWidget(QLabel('功能大类'), 1, 11, 1, 1), grid.addWidget(self.line_func, 1, 12, 1, 1)
+        # grid.addWidget(QLabel('经纬度'), 6, 3, 1, 1), grid.addWidget(self.line_position, 6, 4, 1, 1)
+        # grid.addWidget(QLabel('昼/夜'), 7, 1, 1, 1), grid.addWidget(self.line_time, 7, 2, 1, 1)
+        # grid.addWidget(QLabel('车辆模式'), 7, 3, 1, 1), grid.addWidget(self.line_vehicel_status, 7, 4, 1, 1)
+        # grid.addWidget(QLabel('数据链接'), 8, 1, 1, 1), grid.addWidget(self.line_data_link, 8, 2, 1, 1)
+        self.grib = grid
+
+    def get_combox_text(self):
+        combox_result = []
+        combox_result.append(self.line_tester.text())
+        combox_result.append(self.line_vehicel.text())
+        # combox_result.append(self.line_MPD.text())
+        # combox_result.append(self.line_MPI.text())
+        combox_result.append(self.line_driving_version.text())
+        # combox_result.append(self.line_planning_version.text())
+        # combox_result.append(self.line_perception_version.text())
+        combox_result.append(self.line_weather.text())
+        combox_result.append(self.line_road_level.text())
+        # combox_result.append(self.line_project.text())
+        combox_result.append(self.line_func.text())
+        # combox_result.append(self.line_position.text())
+        # combox_result.append(self.line_time.text())
+        # combox_result.append(self.line_vehicel_status.text())
+        # combox_result.append(self.line_data_link.text())
+        return combox_result
 
     def init_problem_list_module(self):
         """
@@ -527,16 +584,14 @@ class RecordWindows(QWidget):
         self._problem_list.setItem(row_count, 2, QTableWidgetItem(df.iloc[row, 2]))
         self._problem_list.setItem(row_count, 3, QTableWidgetItem(df.iloc[row, 3]))
         self._problem_list.setCellWidget(row_count, 4, QLineEdit())
+        self.flush_problem_describe()
 
     def flush_problem_describe(self):
         df = tm_record_problem.get_all_problems()
         for row_count in range(self._problem_list.rowCount()):
-            try:
-                df.iloc[self.row_dict[str(row_count)], 4] = self._problem_list.cellWidget(row_count, 4).text()
-            except Exception as E:
-                utils.logger.info(E)
-                continue
-            df.to_excel(tm_record_problem.note_file_name, index=False, engine='openpyxl')
+            df.iloc[self.row_dict[str(row_count)], 4] = self._problem_list.cellWidget(row_count, 4).text()
+        df.iloc[df.shape[0] - 1, [5, 6, 9, 12, 13, 15]] = self.get_combox_text()
+        df.to_excel(tm_record_problem.note_file_name, index=False, engine='openpyxl')
 
     def slot_show_main(self):
         self.hide()

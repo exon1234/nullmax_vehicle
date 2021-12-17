@@ -116,12 +116,16 @@ def get_ranging_side(label_jsons, perce_jsons, file_name):
             if not perce_data or perce_data['obstacle_valid'] == 0:
                 continue
             label_type = enum_obstacle_type[label_data['type']]
+
             label_position_x = label_data['box_3d']["dists"]['z']
             label_position_y = label_data['box_3d']["dists"]['x']
+
             perce_position_x = perce_data["position"]['obstacle_pos_x_filter']
             perce_position_y = perce_data["position"]['obstacle_pos_y_filter']
+
             distance_tolerance_x = abs(perce_position_x - label_position_x)
             distance_tolerance_y = abs(perce_position_y - label_position_y)
+
             result_type = label_type if label_type in analyze_obstacle_type else 'other'
             for index_key, threshold_x in enum_obstacle_x.items():
                 if not threshold_x[0] < label_position_x <= threshold_x[1] or result_type == 'other':
@@ -153,7 +157,7 @@ def get_velocity_side(label_jsons, perce_jsons, file_name):
     configs = Config.replay_configs()
     enum_obstacle_type, analyze_obstacle_type = configs["enum_obstacle"], configs["analyze_obstacle"]
     enum_obstacle_x, enum_obstacle_y = configs["ranging_obstacle_x"], configs["ranging_obstacle_y"]
-    columns = ['obstacle', 'Dx','velocity_x','velocity_y','velocity_x_count','velocity_y_count']
+    columns = ['obstacle', 'Dx', 'velocity_x', 'velocity_y', 'velocity_x_count', 'velocity_y_count']
     index = ['_'.join([x, y]) for x in analyze_obstacle_type for y in enum_obstacle_x.keys()]
 
     df = pd.DataFrame(columns=columns, index=index)
@@ -170,8 +174,8 @@ def get_velocity_side(label_jsons, perce_jsons, file_name):
             label_type = enum_obstacle_type[label_data['type']]
             label_position_x = label_data['box_3d']["dists"]['z']
 
-            label_velocity_x = label_data['box_3d']["dists"]['z']
-            label_velocity_y = label_data['box_3d']["dists"]['x']
+            label_velocity_x = label_data['box_3d']["velocity"]['z']
+            label_velocity_y = label_data['box_3d']["velocity"]['x']
 
             perce_velocity_x = perce_data["velocity"]['obstacle_rel_vel_x_filter']
             perce_velocity_y = perce_data["velocity"]['obstacle_rel_vel_y_filter']
@@ -207,7 +211,7 @@ def get_accel_side(label_jsons, perce_jsons, file_name):
     configs = Config.replay_configs()
     enum_obstacle_type, analyze_obstacle_type = configs["enum_obstacle"], configs["analyze_obstacle"]
     enum_obstacle_x, enum_obstacle_y = configs["ranging_obstacle_x"], configs["ranging_obstacle_y"]
-    columns = ['obstacle', 'Dx','accel_x','accel_y','accel_x_count','accel_y_count']
+    columns = ['obstacle', 'Dx', 'accel_x', 'accel_y', 'accel_x_count', 'accel_y_count']
     index = ['_'.join([x, y]) for x in analyze_obstacle_type for y in enum_obstacle_x.keys()]
 
     df = pd.DataFrame(columns=columns, index=index)
@@ -224,10 +228,12 @@ def get_accel_side(label_jsons, perce_jsons, file_name):
             label_type = enum_obstacle_type[label_data['type']]
             label_position_x = label_data['box_3d']["dists"]['z']
 
-            label_accel_x = label_data['box_3d']["dists"]['z']
-            label_accel_y = label_data['box_3d']["dists"]['x']
+            label_accel_x = label_data['box_3d']["accel"]['z']
+            label_accel_y = label_data['box_3d']["accel"]['x']
+
             perce_accel_x = perce_data["accel"]['obstacle_rel_acc_x_filter']
             perce_accel_y = perce_data["accel"]['obstacle_rel_acc_y_filter']
+
             accel_tolerance_x = perce_accel_x - label_accel_x
             accel_tolerance_y = perce_accel_y - label_accel_y
 
@@ -246,7 +252,6 @@ def get_accel_side(label_jsons, perce_jsons, file_name):
     df['accel_y'] = pd.to_numeric(df['accel_y'].apply(lambda x: '%.2f' % x), errors='coerce')
     df.fillna(0, inplace=True)
     utils.write_to_excel(df=df, file_name=file_name, sheet_name='distance')
-
 
 
 @utils.register('问题绘图对比', 'KPI')
@@ -714,7 +719,6 @@ def statistic_range(label_jsons, perce_jsons, file_name):
     new_data = det.groupby(['cate', 'range'], as_index=False).agg(['mean', 'std', 'count'])
     print(new_data)
     new_data.to_excel('./test_result/jiao/statistic_range.xlsx')
-
 
 # @utils.register('tracking', 'KPI')
 # def get_problem_track(label_jsons, perce_jsons, file_name):
