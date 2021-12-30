@@ -352,7 +352,7 @@ def get_match_obstacle_precision_side(label_result, perce_result):
                     yield None, perce_data
 
 
-def get_match_obstacle_2d(label_result, perce_result):
+def get_match_obstacle_3d(label_result, perce_result):
     '''多文件目标障碍物匹配'''
     perce_result = perce_result["tracks"]
     configs = Config.replay_configs()

@@ -112,7 +112,7 @@ def get_ranging_side(label_jsons, perce_jsons, file_name):
     for label_result, perce_result in utils.get_match_img_more_json(label_jsons, perce_jsons):
         if not label_result or not perce_result:
             continue
-        for label_data, perce_data in utils.get_match_obstacle_2d(label_result, perce_result):
+        for label_data, perce_data in utils.get_match_obstacle_3d(label_result, perce_result):
             if not perce_data or perce_data['obstacle_valid'] == 0:
                 continue
             label_type = enum_obstacle_type[label_data['type']]
@@ -168,7 +168,7 @@ def get_velocity_side(label_jsons, perce_jsons, file_name):
     for label_result, perce_result in utils.get_match_img_more_json(label_jsons, perce_jsons):
         if not label_result or not perce_result:
             continue
-        for label_data, perce_data in utils.get_match_obstacle_2d(label_result, perce_result):
+        for label_data, perce_data in utils.get_match_obstacle_3d(label_result, perce_result):
             if not perce_data or perce_data['obstacle_valid'] == 0:
                 continue
             label_type = enum_obstacle_type[label_data['type']]
@@ -222,7 +222,7 @@ def get_accel_side(label_jsons, perce_jsons, file_name):
     for label_result, perce_result in utils.get_match_img_more_json(label_jsons, perce_jsons):
         if not label_result or not perce_result:
             continue
-        for label_data, perce_data in utils.get_match_obstacle_2d(label_result, perce_result):
+        for label_data, perce_data in utils.get_match_obstacle_3d(label_result, perce_result):
             if not perce_data or perce_data['obstacle_valid'] == 0:
                 continue
             label_type = enum_obstacle_type[label_data['type']]
@@ -267,7 +267,10 @@ def draw_problem_img(problem_jsons, raw_imgs, file_name):
                 continue
             shutil.copy(raw_img, copy_path)
             new_path = os.path.join(copy_path, os.path.basename(raw_img)).encode('utf-8')
-            utils.draw_plot(new_path, problem_json_data)
+            try:
+                utils.draw_plot(new_path, problem_json_data)
+            except:
+                continue
 
 
 @utils.register('标注/感知数据绘图', 'KPI')
@@ -284,7 +287,10 @@ def draw_label_img(problem_jsons, raw_imgs, file_name):
                     continue
                 shutil.copy(raw_img, copy_path)
                 new_path = os.path.join(copy_path, os.path.basename(raw_img)).encode('utf-8')
-                utils.draw_plot(new_path, problem_json_data)
+                try:
+                    utils.draw_plot(new_path, problem_json_data)
+                except:
+                    continue
 
     elif len(problem_jsons) >= 1:
         for problem_json in problem_jsons:
