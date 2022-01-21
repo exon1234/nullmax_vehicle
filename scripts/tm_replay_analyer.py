@@ -266,11 +266,8 @@ def draw_problem_img(problem_jsons, raw_imgs, file_name):
             if not os.path.basename(raw_img).rsplit('.', 1)[0] == file_name.rsplit('.', 1)[0]:
                 continue
             shutil.copy(raw_img, copy_path)
-            new_path = os.path.join(copy_path, os.path.basename(raw_img)).encode('utf-8')
-            try:
-                utils.draw_plot(new_path, problem_json_data)
-            except:
-                continue
+            new_path = os.path.join(copy_path, os.path.basename(raw_img))
+            utils.draw_plot(new_path, problem_json_data)
 
 
 @utils.register('标注/感知数据绘图', 'KPI')
@@ -286,11 +283,9 @@ def draw_label_img(problem_jsons, raw_imgs, file_name):
                 if not os.path.basename(raw_img).rsplit('.', 1)[0] == file_name.rsplit('.', 1)[0]:
                     continue
                 shutil.copy(raw_img, copy_path)
-                new_path = os.path.join(copy_path, os.path.basename(raw_img)).encode('utf-8')
-                try:
-                    utils.draw_plot(new_path, problem_json_data)
-                except:
-                    continue
+                new_path = os.path.join(copy_path, os.path.basename(raw_img))
+                utils.draw_plot(new_path, problem_json_data)
+
 
     elif len(problem_jsons) >= 1:
         for problem_json in problem_jsons:
@@ -303,7 +298,7 @@ def draw_label_img(problem_jsons, raw_imgs, file_name):
                 if not os.path.basename(raw_img).rsplit('.', 1)[0] == file_name.rsplit('.', 1)[0]:
                     continue
                 shutil.copy(raw_img, copy_path)
-                new_path = os.path.join(copy_path, os.path.basename(raw_img)).encode('utf-8')
+                new_path = os.path.join(copy_path, os.path.basename(raw_img))
                 utils.draw_plot(new_path, problem_json_data)
 
 
