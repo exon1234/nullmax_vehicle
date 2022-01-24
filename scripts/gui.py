@@ -215,6 +215,7 @@ class FormatWindows(QWidget):
         self.btn_img2avi = QPushButton('img_2_avi', self)
         self.btn_png2yuv = QPushButton('png_2_yuv', self)
         self.btn_png2bmp = QPushButton('png_2_bmp', self)
+        self.btn_transform_3d = QPushButton('transform_3d', self)
         # self.btn_label2split = QPushButton('label_split', self)
         self.file_label = DropArea('拖入数据目录')
         self.result_label = DropArea('拖入目标目录')
@@ -222,6 +223,7 @@ class FormatWindows(QWidget):
         self.btn_img2avi.clicked.connect(self.img_conversed_video)
         self.btn_png2yuv.clicked.connect(self.png_conversed_yuv)
         self.btn_png2bmp.clicked.connect(self.png_conversed_bmp)
+        self.btn_transform_3d.clicked.connect(self.trans_3d)
         # self.btn_label2split.clicked.connect(self.label_split_more)
         self.file_label.path_signal.connect(self.FileCallback)
         self.result_label.path_signal.connect(self.SavePathCallback)
@@ -234,6 +236,7 @@ class FormatWindows(QWidget):
         vbox1.addWidget(self.btn_img2avi)
         vbox1.addWidget(self.btn_png2yuv)
         vbox1.addWidget(self.btn_png2bmp)
+        vbox1.addWidget(self.btn_transform_3d)
         # vbox1.addWidget(self.btn_label2split)
         vbox2.addWidget(self.file_label)
         vbox2.addWidget(self.result_label)
@@ -273,6 +276,11 @@ class FormatWindows(QWidget):
         if not self.file_path:
             return
         tm_format_conversion.png_to_yuv(self.file_path, self.save_file_path)
+
+    def trans_3d(self):
+        # if not self.file_path:
+        #     return
+        tm_format_conversion.transform_3d(self.file_path, self.save_file_path)
 
     # def label_split_more(self):
     #     if not self.file_path:

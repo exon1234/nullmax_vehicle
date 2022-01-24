@@ -462,4 +462,74 @@ def draw_plot(new_path, problem_json_data):
     cv2.imwrite(new_path.replace('.yuv', '.png'), img_data)
 
 
+def add_track_id_helper(last_json_data, json_data, idx):
+    '增加track id'
+    for tempA in json_data:
+        boxA = {}
+        boxA["obstacle_bbox.height"] = tempA["box_2d"]["h"]
+        boxA["obstacle_bbox.width"] = tempA["box_2d"]["w"]
+        boxA["obstacle_bbox.x"] = tempA["box_2d"]['x']
+        boxA["obstacle_bbox.y"] = tempA["box_2d"]['y']
+
+        iou_result = {}
+        for num, tempB in enumerate(last_json_data):
+            boxB = {}
+            boxB["obstacle_bbox.height"] = tempB["box_2d"]["h"]
+            boxB["obstacle_bbox.width"] = tempB["box_2d"]["w"]
+            boxB["obstacle_bbox.x"] = tempB["box_2d"]['x']
+            boxB["obstacle_bbox.y"] = tempB["box_2d"]['y']
+
+            iou = bb_intersection_over_union(boxA, boxB)
+            iou_result[num] = iou
+
+        iou_max_item = max(iou_result.items(), key=lambda x: x[1])
+        iou_max_value, iou_max_id = iou_max_item[1], iou_max_item[0]
+        if iou_max_value >= 0.70:
+            tempA['id'] = last_json_data[iou_max_id]["id"]
+        else:
+            tempA['id'] = idx
+            idx += 1
+    return json_data, idx
+    # if iou_max_value >= iou_benchmark:
+    #     yield label_data, perce_result[iou_max_id]
+    #     del perce_result[iou_max_id]
+    # else:
+    #     if label_data['tags']["class"] != 'wheel':
+    #         label_data['tags']["problem"] = 'FN'
+    #         dump_problem_data(label_result['filename'], label_data, raw_perce_result["tracks"], 'recall')
+    #     yield label_data, None
+
+
+def add_track_id(file_path, save_file_path):
+    if not save_file_path:
+        save_file_path = file_path + '_3d'
+
+    label_json_files = get_all_files(file_path, '.json')
+    label_json_files.sort(key=lambda x: x.rsplit('/', 1)[-1].rsplit('.')[0].rsplit('_')[-1].zfill(6))
+
+    idx = 0
+    last_json_data = None
+
+    for label_json_file in label_json_files:
+        json_data = get_json_data(label_json_file)
+        if idx >= 980:
+            idx = 0
+        if not last_json_data:
+            for temp in json_data:
+                temp['id'] = idx
+                idx += 1
+        else:
+            json_data, idx = add_track_id_helper(last_json_data, json_data, idx)
+
+        last_json_data = json_data
+        save_path = label_json_file.replace(file_path, save_file_path)
+        if not os.path.exists(os.path.dirname(save_path)):
+            os.makedirs(os.path.dirname(save_path))
+        with open(save_path, 'w') as f:
+            json.dump(json_data, f, indent=4)
+    # id_list = [x['id'] for x in last_json_data]
+    # print(id_list)
+    return save_file_path
+
+
 logger = init_logger()

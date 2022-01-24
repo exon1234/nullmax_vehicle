@@ -24,7 +24,7 @@ class Config:
     @classmethod
     def replay_configs(cls):
         configs = {
-            "using_cfg": {"line_compensation": -24, "proportion": 3},
+            "using_cfg": {"line_compensation": 0, "proportion": 1},
             "iou": 0.5,
             "enum_obstacle": {0: 'car', 1: 'truck', 2: 'bus', 3: 'pedestrian', 4: 'bicycle', 5: 'motorcycle',
                               6: 'tricycle', 7: 'rider', 8: 'cone', 9: 'barrier', 10: 'sign', 11: 'TRAFFIC_LIGHT'},

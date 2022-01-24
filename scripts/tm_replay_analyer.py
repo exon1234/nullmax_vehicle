@@ -131,11 +131,11 @@ def get_ranging_side(label_jsons, perce_jsons, file_name):
                 if not threshold_x[0] < label_position_x <= threshold_x[1] or result_type == 'other':
                     continue
                 for columns_key, threshold_y in enum_obstacle_y.items():
-                    if threshold_y[0] < label_position_y <= threshold_y[1] and columns_key != 'ego_lane':
+                    if threshold_y[0] < abs(label_position_y) <= threshold_y[1] and columns_key != 'ego_lane':
                         index_name = "_".join([result_type, index_key])
                         df.loc[index_name, columns_key] += distance_tolerance_y
                         df.loc[index_name, columns_key + '_count'] += 1
-                    elif threshold_y[0] < label_position_y <= threshold_y[1] and columns_key == 'ego_lane':
+                    elif threshold_y[0] < abs(label_position_y) <= threshold_y[1] and columns_key == 'ego_lane':
                         index_name = "_".join([result_type, index_key])
                         df.loc[index_name, columns_key] += distance_tolerance_x
                         df.loc[index_name, columns_key + '_count'] += 1
@@ -177,6 +177,9 @@ def get_velocity_side(label_jsons, perce_jsons, file_name):
             label_velocity_x = label_data['box_3d']["velocity"]['z']
             label_velocity_y = label_data['box_3d']["velocity"]['x']
 
+            if label_velocity_x == -1000:
+                continue
+
             perce_velocity_x = perce_data["velocity"]['obstacle_rel_vel_x_filter']
             perce_velocity_y = perce_data["velocity"]['obstacle_rel_vel_y_filter']
 
@@ -198,7 +201,7 @@ def get_velocity_side(label_jsons, perce_jsons, file_name):
     df['velocity_x'] = pd.to_numeric(df['velocity_x'].apply(lambda x: '%.2f' % x), errors='coerce')
     df['velocity_y'] = pd.to_numeric(df['velocity_y'].apply(lambda x: '%.2f' % x), errors='coerce')
     df.fillna(0, inplace=True)
-    utils.write_to_excel(df=df, file_name=file_name, sheet_name='distance')
+    utils.write_to_excel(df=df, file_name=file_name, sheet_name='velocity')
 
 
 @utils.register('环视-测加速度', 'KPI')
@@ -251,7 +254,7 @@ def get_accel_side(label_jsons, perce_jsons, file_name):
     df['accel_x'] = pd.to_numeric(df['accel_x'].apply(lambda x: '%.2f' % x), errors='coerce')
     df['accel_y'] = pd.to_numeric(df['accel_y'].apply(lambda x: '%.2f' % x), errors='coerce')
     df.fillna(0, inplace=True)
-    utils.write_to_excel(df=df, file_name=file_name, sheet_name='distance')
+    utils.write_to_excel(df=df, file_name=file_name, sheet_name='accel')
 
 
 @utils.register('问题绘图对比', 'KPI')
@@ -720,6 +723,8 @@ def statistic_range(label_jsons, perce_jsons, file_name):
     new_data = det.groupby(['cate', 'range'], as_index=False).agg(['mean', 'std', 'count'])
     print(new_data)
     new_data.to_excel('./test_result/jiao/statistic_range.xlsx')
+
+
 
 # @utils.register('tracking', 'KPI')
 # def get_problem_track(label_jsons, perce_jsons, file_name):
